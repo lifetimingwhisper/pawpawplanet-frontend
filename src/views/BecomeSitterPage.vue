@@ -78,9 +78,9 @@ const registerToFreelancer = () => {
           <div class="ms-3">服務結束後,平台會安全地處理款項,讓你安心收到報酬。此外,飼主還能給予評價,幫助你獲得更多接案機會!</div>
         </div>
       </div>
-      <RouterLink to="/signup" class="btn btn-outline-dark p-3 my-5">
+      <button type="button" class="btn btn-outline-dark p-3 my-5" @click="registerToFreelancer">
         立即註冊,開啟你的寵物保母旅程!
-      </RouterLink>
+      </button>
     </div>
   </main>
 </template>
