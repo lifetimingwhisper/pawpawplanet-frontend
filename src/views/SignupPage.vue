@@ -8,16 +8,16 @@
         <form @submit.prevent="submitForm">
           <div class="mb-3">
             <label for="email" class="form-label">Email address</label>
-            <input type="email" class="form-control" id="email" v-model="email" required>
+            <input type="email" class="form-control" placeholder="請輸入您的 Email" id="email" v-model="email" required>
           </div>
           <div class="mb-3">
             <label for="password" class="form-label">密碼</label>
-            <input type="password" class="form-control" id="password" v-model="password" required>
-            <div class="form-text">密碼需包含至少 8 個字元並包含英文與數字</div>
+            <input type="password" class="form-control" placeholder="密碼需包含至少 8 個字元並包含英文與數字" id="password" v-model="password" required>
+<!--            <div class="form-text">密碼需包含至少 8 個字元並包含英文與數字</div>-->
           </div>
           <div class="mb-3">
             <label for="confirmPassword" class="form-label">確認密碼</label>
-            <input type="password" class="form-control" id="confirmPassword" v-model="confirmPassword" required>
+            <input type="password" class="form-control" placeholder="密碼需包含至少 8 個字元並包含英文與數字" id="confirmPassword" v-model="confirmPassword" required>
           </div>
           <div class="mb-3">
             <label class="form-label d-block">選擇身分</label>
@@ -51,7 +51,7 @@
   const email = ref('');
   const password = ref('');
   const confirmPassword = ref('');
-  const role = ref('');
+  const role = ref('owner');
   const errorMessage = ref('');
 
   const router = useRouter();

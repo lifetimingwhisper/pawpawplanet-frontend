@@ -8,11 +8,11 @@
         <form @submit.prevent="submitForm">
           <div class="mb-3">
             <label for="email" class="form-label">Email address</label>
-            <input type="email" class="form-control" id="email" v-model="email" required>
+            <input type="email" class="form-control" placeholder="請輸入您的 Email" id="email" v-model="email" required>
           </div>
           <div class="mb-3">
             <label for="password" class="form-label">Password</label>
-            <input type="password" class="form-control" id="password" v-model="password" required>
+            <input type="password" class="form-control" placeholder="請輸入您的密碼" id="password" v-model="password" required>
           </div>
           <div class="d-flex align-items-center mt-3">
             <button type="submit" class="btn btn-primary me-3">登入</button>
