@@ -1,43 +1,54 @@
 <template>
-  <div class="container my-4 p-4">
-    <div class="border border-1 rounded p-4">
-      <div class="d-flex justify-content-between align-items-center mb-3">
-        <h4>基本資料設定</h4>
-        <button v-if="!isEditMode" class="btn btn-outline-dark" @click="startEdit">
-          <i class="bi bi-pencil-square"></i> 編輯
-        </button>
-      </div>
-      <profile-form v-model="tempForm" :edit-mode="isEditMode" :errors="errors"> </profile-form>
-
-      <hr />
-      <h5 class="mb-3">你可以接案的時間是:</h5>
-      <weekly-availability
-        class="my-3"
-        v-model:weeklyMode="tempForm.is_weekly_mode"
-        v-model:selectedDays="tempForm.working_days"
-        :endDate="originalForm.calendar.end_date"
-        :editMode="isEditMode"
-        :errors="errors"
+  <div class="form-box my-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <h4 class="text-primary-dark-second">基本資料設定</h4>
+      <button
+        v-if="!isEditMode"
+        class="text-primary-dark-second btn btn-primary btn-lg rounded-pill"
+        @click="startEdit"
       >
-      </weekly-availability>
-      <schedule-calendar
-        v-model="originalForm.calendar.schedule"
-        :weeklyMode="tempForm.is_weekly_mode"
-        :editMode="isEditMode"
-      >
-      </schedule-calendar>
-      <div class="text-end mt-3" v-if="isEditMode">
-        <button type="button" class="btn btn-outline-secondary me-2" @click="cancelEdit">
-          取消
-        </button>
-        <button type="button" class="btn btn-primary" @click="confirmSave" :disabled="!hasChanges">
-          確認儲存
-        </button>
-      </div>
-
-      <hr />
-      <service-list :services="originalForm.services" :is-finished="isFinished" />
+        <i class="bi bi-pencil-square"></i> 編輯
+      </button>
     </div>
+    <profile-form v-model="tempForm" :edit-mode="isEditMode" :errors="errors"> </profile-form>
+
+    <hr />
+    <h5 class="text-primary-dark-second mb-3">你可以接案的時間是</h5>
+    <weekly-availability
+      class="my-3"
+      v-model:weeklyMode="tempForm.is_weekly_mode"
+      v-model:selectedDays="tempForm.working_days"
+      :endDate="originalForm.calendar.end_date"
+      :editMode="isEditMode"
+      :errors="errors"
+    >
+    </weekly-availability>
+    <schedule-calendar
+      v-model="originalForm.calendar.schedule"
+      :weeklyMode="tempForm.is_weekly_mode"
+      :editMode="isEditMode"
+    >
+    </schedule-calendar>
+    <div class="text-end mt-3" v-if="isEditMode">
+      <button
+        type="button"
+        class="btn-outline-dark-second btn btn-lg rounded-pill me-2"
+        @click="cancelEdit"
+      >
+        取消
+      </button>
+      <button
+        type="button"
+        class="text-primary-dark-second btn btn-primary btn-lg rounded-pill"
+        @click="confirmSave"
+        :disabled="!hasChanges"
+      >
+        確認儲存
+      </button>
+    </div>
+
+    <hr />
+    <service-list :services="originalForm.services" :is-finished="isFinished" />
   </div>
 </template>
 
@@ -74,7 +85,7 @@ const emptyForm = {
   working_days: [],
   calendar: {
     end_date: '',
-    schedule: []
+    schedule: [],
   },
   services: [],
 }
@@ -192,7 +203,7 @@ function validateForm() {
   if (!account_name) errors.value.account_name = '請輸入戶名'
   if (!account_number) errors.value.account_number = '請輸入帳號'
 
-   if (!form.working_days.length) errors.value.working_days = '請選擇您可提供服務的星期'
+  if (!form.working_days.length) errors.value.working_days = '請選擇您可提供服務的星期'
 
   return Object.keys(errors.value).length === 0
 }
@@ -222,3 +233,18 @@ watch(
   { deep: true },
 )
 </script>
+
+<style scoped lang="scss">
+hr {
+  background-color: $primary-dark;
+  opacity: 1;
+}
+.form-box {
+  border: 1px solid $primary-dark;
+  border-radius: 20px;
+  padding: 30px 15px;
+  @media (min-width: 768px) {
+    padding: 30px;
+  }
+}
+</style>

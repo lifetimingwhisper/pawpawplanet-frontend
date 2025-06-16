@@ -453,13 +453,14 @@ const remove = (file) => {
     </div>
   </div>
 </template>
-<style scoped>
+<style lang="scss" scoped>
 .loading-overlay {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
+  border-radius: 50%;
   background: rgba(0, 0, 0, 0.4);
   display: flex;
   justify-content: center;
@@ -483,6 +484,7 @@ const remove = (file) => {
 img {
   width: 100%;
   height: 100%;
+  border-radius: 50%;
   object-fit: cover;
 }
 .close {
@@ -504,12 +506,14 @@ img {
   }
 }
 .upload {
-  border: 1px dashed #ccc;
+  border-radius: 50%;
+  border: 1px dashed $primary-dark;
   display: flex;
   justify-content: center;
   align-items: center;
 }
 .upload-icon {
+  color: $primary-dark;
   font-size: 20px;
   width: 24px;
   height: 24px;

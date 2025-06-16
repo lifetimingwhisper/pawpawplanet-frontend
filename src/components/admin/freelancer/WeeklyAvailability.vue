@@ -8,14 +8,14 @@
       />
       <label class="form-check-label">開啟每週重複</label>
     </div> -->
-
+    
     <div class="d-flex flex-wrap gap-2">
       <button
         v-for="(day, index) in days"
         :key="index"
-        class="btn"
+        class="btn text-primary-dark-second opacity-100"
         :class="{
-          'btn-outline-primary': !selectedDays.includes(index),
+          'btn-outline-dark-second': !selectedDays.includes(index),
           'btn-primary': selectedDays.includes(index),
           disabled: !editMode
         }"

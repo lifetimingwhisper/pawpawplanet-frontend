@@ -154,7 +154,7 @@
       <h2 class="text-center mb-4">飼主及毛小孩個人中心</h2>
       <div class="card mx-auto p-4" style="max-width: 700px; border-radius: 20px;">
         <div class="d-flex flex-column flex-md-row">
-          <img v-if="owner.avatar" :src="owner.avatar" alt="飼主照片" class="rounded img-fluid me-md-4 mb-3 mb-md-0" style="max-width: 250px; height: auto;" />
+          <img v-if="owner?.avatar?.length" :src="owner.avatar" alt="飼主照片" class="rounded img-fluid me-md-4 mb-3 mb-md-0" style="max-width: 250px; height: auto;" />
           <div class="flex-fill">
             <div class="text-end">
               <button class="btn btn-outline-secondary btn-sm" @click="editProfile">

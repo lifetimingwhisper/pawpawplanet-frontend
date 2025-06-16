@@ -1,40 +1,40 @@
 <template>
   <div>
-    <h5 class="mb-3">你所服務:</h5>
+    <h5 class="mb-3 text-primary-dark-second">你所服務</h5>
     <div class="mb-3">
-      <h6>在我家:</h6>
+      <h6 class="text-primary-dark-second">在我家</h6>
       <div
         v-for="item in homeServiceList"
         :key="item.name"
-        class="d-flex justify-content-between align-items-center border p-2 rounded mb-2"
+        class="service-box d-flex justify-content-between align-items-center p-2 mb-2"
       >
-        <div>
+        <div class="text-primary-dark-second">
           <i :class="item.icon"></i> {{ item.name }}
-          <div v-if="item.created" class="ms-4 text-primary-dark">
+          <div v-if="item.created" class="ms-4 text-black">
             <small> 價格：{{ item.serviceData.price_unit }}費用 </small>
             <br />
             <small> {{ item.serviceData.price }} TWD </small>
           </div>
         </div>
-        <button class="btn btn-outline-primary btn-sm" @click="goEdit(item.type)">提供服務</button>
+        <button class="text-primary-dark-second btn btn-primary btn-lg rounded-pill" @click="goEdit(item.type)">提供服務</button>
       </div>
     </div>
     <div>
-      <h6>在顧客家:</h6>
+      <h6 class="text-primary-dark-second">在顧客家</h6>
       <div
         v-for="item in customerServiceList"
         :key="item.name"
-        class="d-flex justify-content-between align-items-center border p-2 rounded mb-2"
+        class="service-box d-flex justify-content-between align-items-center p-2 mb-2"
       >
-        <div>
+        <div class="text-primary-dark-second">
           <i :class="item.icon"></i> {{ item.name }}
-          <div v-if="item.created" class="ms-4 text-primary-dark">
+          <div v-if="item.created" class="ms-4 text-black">
             <small> 價格：{{ item.serviceData.price_unit }}費用 </small>
             <br />
             <small> {{ item.serviceData.price }} TWD </small>
           </div>
         </div>
-        <button class="btn btn-outline-primary btn-sm" @click="goEdit(item.type)">提供服務</button>
+        <button class="text-primary-dark-second btn btn-primary btn-lg rounded-pill" @click="goEdit(item.type)">提供服務</button>
       </div>
     </div>
   </div>
@@ -90,3 +90,9 @@ function goEdit(type) {
   router.push(`/freelancer/services/${type}`)
 }
 </script>
+<style lang="scss" scoped>
+.service-box {
+  border: 1px solid $primary-dark;
+  border-radius: 8px;
+}
+</style>

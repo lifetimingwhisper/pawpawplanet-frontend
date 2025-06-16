@@ -1,32 +1,37 @@
 <template>
   <div class="py-4">
-    <h4 class="mb-3">
+    <h4 class="mb-3 text-primary-dark-second">
       <i :class="service.icon" class="me-2"></i>
       {{ service.label }}
+      <div class="form-check form-switch float-end mb-3 d-flex align-items-center">
+        <input class="form-check-input" role="button" type="checkbox" v-model="form.enabled" />
+        <label class="ms-2 form-check-label">啟用服務</label>
+      </div>
     </h4>
-    <div class="form-check form-switch float-end mb-3">
-      <input class="form-check-input" role="button" type="checkbox" v-model="form.enabled" />
-      <label class="form-check-label">啟用服務</label>
-    </div>
 
     <div class="mb-3">
-      <label for="input-title" class="form-label required">服務標題:</label>
-      <input id="input-title" v-model="form.title" class="form-control" />
+      <label for="input-title" class="form-label required">服務標題</label>
+      <input id="input-title" v-model="form.title" class="form-control-sm" />
       <small v-if="errors.title" class="text-danger">{{ errors.title }}</small>
     </div>
 
     <div class="mb-3">
-      <label for="input-description" class="form-label required">服務介紹:</label>
+      <label for="input-description" class="form-label required">服務介紹</label>
       <textarea id="input-description" v-model="form.description" rows="4" class="form-control" />
       <small v-if="errors.description" class="text-danger">{{ errors.description }}</small>
     </div>
 
     <div class="mb-3">
-      <label class="form-label">服務圖片:</label>
+      <label class="form-label">服務圖片</label>
       <div class="image-uploader">
         <div class="img-box" v-for="(file, index) in form.images" :key="index">
+          <div v-if="file.uploading" class="loading-overlay">
+            <div class="spinner-border text-primary" role="status">
+              <span class="visually-hidden">Loading...</span>
+            </div>
+          </div>
           <img :src="file.blob || file.url" />
-          <div class="close" @click="remove(file)">
+          <div v-if="!file.uploading" class="close" @click="remove(file)">
             <div class="icon-close">×</div>
           </div>
         </div>
@@ -49,7 +54,7 @@
     </div>
 
     <div class="mb-3">
-      <label class="form-label d-block required">寵物種類:</label>
+      <label class="form-label d-block required">寵物種類</label>
       <div class="form-check form-check-inline">
         <input
           id="dog"
@@ -76,7 +81,7 @@
     </div>
 
     <div class="mb-3">
-      <label class="form-label d-block required">體型:</label>
+      <label class="form-label d-block required">體型</label>
       <div class="form-check form-check-inline" v-for="(size, index) in bodySizes" :key="size">
         <input
           :id="'size' + index"
@@ -93,19 +98,21 @@
     </div>
 
     <div class="mb-3">
-      <label for="input-age" class="form-label required">年齡範圍:</label>
-      <div class="d-flex gap-2">
+      <label for="input-age" class="form-label required">年齡範圍</label>
+      <div class="d-flex flex-wrap gap-2">
         <input
           id="input-age"
           v-model="form.allowed_pet_ages.min"
+          min="0"
           type="number"
-          class="form-control"
+          class="form-control-sm"
           placeholder="最小"
         />
         <input
           v-model="form.allowed_pet_ages.max"
+          min="0"
           type="number"
-          class="form-control"
+          class="form-control-sm"
           placeholder="最大"
         />
       </div>
@@ -114,7 +121,7 @@
       }}</small>
     </div>
     <div class="mb-3">
-      <label class="form-label required">性別:</label>
+      <label class="form-label required">性別</label>
       <div>
         <div class="form-check form-check-inline">
           <input
@@ -143,28 +150,28 @@
     </div>
 
     <div class="mb-3">
-      <label for="price-unit" class="form-label required">價格單位: </label>
+      <label for="price-unit" class="form-label required">價格單位</label>
       <input
         id="price-unit"
         placeholder="1天8小時費用"
         v-model="form.price_unit"
         type="text"
-        class="form-control"
+        class="form-control-sm"
       />
     </div>
 
     <div class="mb-3">
-      <label for="price" class="form-label required">價格: </label>
-      <input id="price" v-model="form.price" type="number" class="form-control" />
+      <label for="price" class="form-label required">價格</label>
+      <input id="price" v-model="form.price" type="number" class="form-control-sm" />
     </div>
 
     <div v-if="service.pee_poo_times_per_day" class="mb-3">
-      <label for="pee_poo_times_per_day" class="form-label required">每天尿尿及便便次數:</label>
+      <label for="pee_poo_times_per_day" class="form-label required">每天尿尿及便便次數</label>
       <input
         id="pee_poo_times_per_day"
         v-model="form.extra_options.pee_poo_times_per_day"
         type="number"
-        class="form-control"
+        class="form-control-sm"
       />
       <small v-if="errors.pee_poo_times_per_day" class="text-danger">{{
         errors.pee_poo_times_per_day
@@ -172,12 +179,12 @@
     </div>
 
     <div v-if="service.walk_times_per_day" class="mb-3">
-      <label for="walk_times_per_day" class="form-label required">每天散步次數:</label>
+      <label for="walk_times_per_day" class="form-label required">每天散步次數</label>
       <input
         id="walk_times_per_day"
         v-model="form.extra_options.walk_times_per_day"
         type="number"
-        class="form-control"
+        class="form-control-sm"
       />
       <small v-if="errors.walk_times_per_day" class="text-danger">{{
         errors.walk_times_per_day
@@ -185,17 +192,17 @@
     </div>
 
     <div v-if="service.house_type" class="mb-3">
-      <label for="house_type" class="form-label required">我家類型:</label>
-      <input id="house_type" v-model="form.extra_options.house_type" class="form-control" />
+      <label for="house_type" class="form-label required">我家類型</label>
+      <input id="house_type" v-model="form.extra_options.house_type" class="form-control-sm" />
       <small v-if="errors.house_type" class="text-danger">{{ errors.house_type }}</small>
     </div>
 
     <div v-if="service.outdoor_area_size" class="mb-4">
-      <label for="outdoor_area_size" class="form-label required">我家戶外區域面積坪數:</label>
+      <label for="outdoor_area_size" class="form-label required">我家戶外區域面積坪數</label>
       <input
         id="outdoor_area_size"
         v-model="form.extra_options.outdoor_area_size"
-        class="form-control"
+        class="form-control-sm"
       />
       <small v-if="errors.outdoor_area_size" class="text-danger">{{
         errors.outdoor_area_size
@@ -203,8 +210,12 @@
     </div>
 
     <div class="text-end">
-      <button class="btn btn-outline-secondary me-2 btn-lg" @click="goBack">取消</button>
-      <button class="btn btn-primary btn-lg" @click="submit">確認</button>
+      <button class="btn-outline-dark-second btn btn-lg rounded-pill me-2" @click="goBack">
+        取消
+      </button>
+      <button class="text-primary-dark-second btn btn-primary btn-lg rounded-pill" @click="submit">
+        確認
+      </button>
     </div>
   </div>
 </template>
@@ -363,6 +374,8 @@ const filter = (newFile, oldFile, prevent) => {
   // 創建 blob 字段 用於圖片預覽
   const URL = window.URL || window.webkitURL
   newFile.blob = URL.createObjectURL(newFile.file)
+  //圖片上傳中
+  newFile.uploading = true
 }
 
 const handleInput = async (newFile) => {
@@ -382,6 +395,7 @@ const handleInput = async (newFile) => {
     const imageUrl = res?.image_url
     // 把圖片上傳後的 URL 設進 file 中，這樣就會存在 form.avatar 裡
     newFile.url = imageUrl
+    newFile.uploading = false // 圖片上傳完成
   } catch (err) {
     console.error('圖片上傳失敗:', err)
     alert('圖片上傳失敗，請重試')
@@ -404,25 +418,77 @@ const getImageUrls = (fileList = []) => {
 }
 </script>
 <style scoped lang="scss">
-.form-label.required::before {
-  content: '*';
-  color: red;
-  margin-right: 4px;
+.form-label {
+  font-weight: 700;
+  color: $primary-dark-second;
+  &.required::before {
+    content: '*';
+    color: red;
+    margin-right: 4px;
+  }
+}
+.form-control,
+.form-select,
+.form-control-sm {
+  display: block;
+  color: $primary-dark-second;
+  border: 1px solid $primary-dark;
+  height: 40px;
+  border-radius: 100px;
+  background-color: transparent;
+
+  &:focus {
+    color: $primary-dark-second;
+    background-color: transparent;
+    border-color: rgb(245.5, 219.5, 196.5);
+    outline: 0;
+    box-shadow: 0 0 0 0.25rem rgba(236, 184, 138, 0.25);
+  }
+
+  &:disabled {
+    background-color: $black-100;
+  }
+}
+
+textarea.form-control {
+  height: 140px;
+  border-radius: 8px;
+  max-width: 100%;
+  @media (min-width: 768px) {
+    max-width: 500px;
+  }
+}
+.loading-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 20px;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1;
 }
 .image-uploader {
   display: flex;
   flex-wrap: wrap;
-  justify-content: center;
 }
 .img-box {
-  width: 100px;
-  height: 100px;
+  width: 160px;
+  height: 160px;
   margin: 10px 5px;
   position: relative;
+  @media (min-width: 768px) {
+    width: 240px;
+    height: 240px;
+  }
 }
 img {
   width: 100%;
   height: 100%;
+  border-radius: 20px;
   object-fit: cover;
 }
 .close {
@@ -444,12 +510,14 @@ img {
   }
 }
 .upload {
-  border: 1px dashed #ccc;
+  border-radius: 20px;
+  border: 1px dashed $primary-dark;
   display: flex;
   justify-content: center;
   align-items: center;
 }
 .upload-icon {
+  color: $primary-dark;
   font-size: 20px;
   width: 24px;
   height: 24px;
