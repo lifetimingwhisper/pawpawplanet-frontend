@@ -1,6 +1,10 @@
 <template>
-  <div class="row">
-    <div class="col-md-4 text-center" v-show="modelValue?.avatar?.length || editMode">
+  <div class="w-100 d-flex align-items-start flex-wrap">
+    <!-- 圖片上傳 -->
+    <div
+      class="col-12 col-lg-4 text-center mb-3 mb-md-0"
+      v-show="modelValue?.avatar?.length || editMode"
+    >
       <div class="image-uploader">
         <div class="img-box" v-for="(file, index) in modelValue.avatar" :key="index">
           <div v-if="file.uploading" class="loading-overlay">
@@ -29,13 +33,13 @@
           </div>
         </FileUpload>
       </div>
-      <small class="text-muted" v-show="editMode && modelValue.avatar?.length < 1"
-        >(上傳圖片)</small
-      >
+      <small class="text-muted" v-show="editMode && modelValue.avatar?.length < 1">上傳圖片</small>
     </div>
-    <div :class="{ 'col-md-8': modelValue?.avatar?.length || editMode }">
+
+    <!-- 表單 -->
+    <div :class="['col-12', modelValue?.avatar?.length || editMode ? 'col-lg-8' : '']">
       <div class="mb-2">
-        <label class="form-label required" for="input-name">姓名:</label>
+        <label class="form-label required" for="input-name">姓名</label>
         <input
           id="input-name"
           v-model="modelValue.name"
@@ -45,7 +49,7 @@
         <small v-if="errors?.name && editMode" class="text-danger">{{ errors.name }}</small>
       </div>
       <div class="mb-2">
-        <label class="form-label required" for="input-city">所在地區:</label>
+        <label class="form-label required" for="input-city">所在地區</label>
         <div class="row">
           <div class="col-md-6 mb-2">
             <select
@@ -78,7 +82,7 @@
         </div>
       </div>
       <div class="mb-2">
-        <label for="input-phone" class="form-label required">電話:</label>
+        <label for="input-phone" class="form-label required">電話</label>
         <input
           id="input-phone"
           v-model="modelValue.phone"
@@ -88,11 +92,11 @@
         <small v-if="errors?.phone && editMode" class="text-danger">{{ errors.phone }}</small>
       </div>
       <div class="mb-2">
-        <label class="form-label">Email:</label>
+        <label class="form-label">Email</label>
         <input v-model="modelValue.email" class="form-control" disabled />
       </div>
       <div class="mb-2">
-        <label for="input-bank" class="form-label required">銀行帳戶:</label>
+        <label for="input-bank" class="form-label required">銀行帳戶</label>
         <input
           id="input-bank"
           v-model="modelValue.bank_account.bank"
@@ -103,7 +107,7 @@
         <small v-if="errors?.bank && editMode" class="text-danger">{{ errors.bank }}</small>
       </div>
       <div class="mb-2">
-        <label for="input-account_name" class="form-label required">戶名:</label>
+        <label for="input-account_name" class="form-label required">戶名</label>
         <input
           id="input-account_name"
           v-model="modelValue.bank_account.account_name"
@@ -115,7 +119,7 @@
         }}</small>
       </div>
       <div class="mb-2">
-        <label for="input-account_number" class="form-label required">帳號:</label>
+        <label for="input-account_number" class="form-label required">帳號</label>
         <input
           id="input-account_number"
           v-model="modelValue.bank_account.account_number"
@@ -127,7 +131,7 @@
         }}</small>
       </div>
       <div>
-        <label for="input-description" class="form-label required">自我介紹:</label>
+        <label for="input-description" class="form-label required">自我介紹</label>
         <textarea
           id="input-description"
           v-model="modelValue.description"
@@ -231,16 +235,46 @@ const remove = (file) => {
   left: 0;
   width: 100%;
   height: 100%;
+  border-radius: 50%;
   background: rgba(0, 0, 0, 0.4);
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 1;
 }
-.form-label.required::before {
-  content: '*';
-  color: red;
-  margin-right: 4px;
+
+.form-label {
+  font-weight: 700;
+  color: $primary-dark-second;
+  &.required::before {
+    content: '*';
+    color: red;
+    margin-right: 4px;
+  }
+}
+
+.form-control,
+.form-select {
+  color: $primary-dark-second;
+  border: 1px solid $primary-dark;
+  height: 40px;
+  border-radius: 100px;
+  background-color: transparent;
+  width: 100%;
+
+  &:focus {
+    color: $primary-dark-second;
+    background-color: transparent;
+  }
+
+  &:disabled {
+    background-color: $black-100;
+  }
+}
+
+textarea.form-control {
+  height: 140px;
+  border-radius: 8px;
 }
 
 .image-uploader {
@@ -248,17 +282,25 @@ const remove = (file) => {
   flex-wrap: wrap;
   justify-content: center;
 }
+
 .img-box {
-  width: 100px;
-  height: 100px;
-  margin: 10px 0;
+  width: 160px;
+  height: 160px;
+  margin: 0 auto 10px;
   position: relative;
+  @media (min-width: 768px) {
+    width: 240px;
+    height: 240px;
+  }
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+  }
 }
-img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
+
 .close {
   cursor: pointer;
   position: absolute;
@@ -268,6 +310,7 @@ img {
   width: 20px;
   height: 20px;
   border-radius: 50%;
+
   .icon-close {
     position: absolute;
     color: #ffffff;
@@ -277,13 +320,17 @@ img {
     font-size: 20px;
   }
 }
+
 .upload {
-  border: 1px dashed #ccc;
+  border-radius: 50%;
+  border: 1px dashed $primary-dark;
   display: flex;
   justify-content: center;
   align-items: center;
 }
+
 .upload-icon {
+  color: $primary-dark;
   font-size: 20px;
   width: 24px;
   height: 24px;
