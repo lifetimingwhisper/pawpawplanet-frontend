@@ -16,7 +16,7 @@
             <small> {{ item.serviceData.price }} TWD </small>
           </div>
         </div>
-        <button class="text-primary-dark-second btn btn-primary btn-lg rounded-pill" @click="goEdit(item.type)">提供服務</button>
+        <button class="text-primary-dark-second btn btn-primary btn-lg rounded-pill" @click="goEdit(item.type)">{{ item.serviceData?.enabled ?  '提供' : '啟用'}}服務</button>
       </div>
     </div>
     <div>
@@ -34,7 +34,7 @@
             <small> {{ item.serviceData.price }} TWD </small>
           </div>
         </div>
-        <button class="text-primary-dark-second btn btn-primary btn-lg rounded-pill" @click="goEdit(item.type)">提供服務</button>
+        <button class="text-primary-dark-second btn btn-primary btn-lg rounded-pill" @click="goEdit(item.type)">{{ item.serviceData?.enabled ?  '提供' : '啟用'}}服務</button>
       </div>
     </div>
   </div>
