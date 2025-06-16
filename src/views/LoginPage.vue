@@ -7,11 +7,11 @@
         <h1>登入</h1>
         <form @submit.prevent="submitForm">
           <div class="mb-3">
-            <label for="email" class="form-label">Email address</label>
+            <label for="email" class="form-label">Email address<span class="text-danger">*</span></label>
             <input type="email" class="form-control" placeholder="請輸入您的 Email" id="email" v-model="email" required>
           </div>
           <div class="mb-3">
-            <label for="password" class="form-label">Password</label>
+            <label for="password" class="form-label">Password<span class="text-danger">*</span></label>
             <input type="password" class="form-control" placeholder="請輸入您的密碼" id="password" v-model="password" required>
           </div>
           <div class="d-flex align-items-center mt-3">
