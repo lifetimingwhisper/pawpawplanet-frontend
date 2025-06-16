@@ -122,11 +122,11 @@
         <p>金額<span>｜</span>{{ orderData.payment.amount }}</p>
         <p>付款日期<span>｜</span>{{ orderData.payment.paid_at }}</p>
       </div> -->
-      <div v-if="!(Object.keys(payment).length === 0)" class="border rounded-4 p-3 mt-2">
+      <!-- <div v-if="!(Object.keys(payment).length === 0)" class="border rounded-4 p-3 mt-2">
         <p>支付方式<span>｜</span>{{ formatPaymentMethod }}</p>
         <p>金額<span>｜</span>{{ payment.amount }}</p>
         <p>付款日期<span>｜</span>{{ payment.paid_at }}</p>
-      </div>
+      </div> -->
     </div>
   </div>
 </template>
