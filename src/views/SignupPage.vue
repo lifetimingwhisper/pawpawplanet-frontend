@@ -7,16 +7,16 @@
         <h1>註冊</h1>
         <form @submit.prevent="submitForm">
           <div class="mb-3">
-            <label for="email" class="form-label">Email address<span class="text-danger">*</span></label>
+            <label for="email" class="form-label"><span class="text-danger">*</span>Email address</label>
             <input type="email" class="form-control" placeholder="請輸入您的 Email" id="email" v-model="email" required>
           </div>
           <div class="mb-3">
-            <label for="password" class="form-label">密碼<span class="text-danger">*</span></label>
+            <label for="password" class="form-label"><span class="text-danger">*</span>密碼</label>
             <input type="password" class="form-control" placeholder="密碼需包含至少 8 個字元並包含英文與數字" id="password" v-model="password" required>
 <!--            <div class="form-text">密碼需包含至少 8 個字元並包含英文與數字</div>-->
           </div>
           <div class="mb-3">
-            <label for="confirmPassword" class="form-label">確認密碼<span class="text-danger">*</span></label>
+            <label for="confirmPassword" class="form-label"><span class="text-danger">*</span>確認密碼</label>
             <input type="password" class="form-control" placeholder="密碼需包含至少 8 個字元並包含英文與數字" id="confirmPassword" v-model="confirmPassword" required>
           </div>
           <div class="mb-3">
