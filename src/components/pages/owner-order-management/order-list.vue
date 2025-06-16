@@ -358,14 +358,10 @@ async function submitComment(reviewData, orderData){
     orderData.review.comment = reviewData.comment;
 
     const data = {
-      orderId: orderData.order.id,
       rating: reviewData.selectedRating,
       comment: reviewData.comment,
-      // reviewerId: orderData.owner.id,
-      revieweeId: orderData.freelancer.id
     }
 
-    return
     const response = await postReview(orderData.order.id, data);
     console.log('新增評論結果: response', response);
     orderDataBeingCommented.value = {};
