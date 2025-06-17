@@ -6,6 +6,16 @@ import { useLoginStore } from '@/stores/login.js'
 import { logoutUser } from '@/plugins/api/users/users.js'
 import { useToast } from '@/plugins/toast/toast-plugin.js'
 
+
+defineProps({
+  openMenu: {
+    type: Boolean,
+    required: true,
+  },
+})
+
+const emit = defineEmits(['onPress'])
+
 const router = useRouter()
 const route = useRoute()
 const toast = useToast()
@@ -37,6 +47,10 @@ const clickRegisterBtn = () => {
   router.push('/signup')
 }
 
+const clickMenu = () => {
+  emit('onPress')
+}
+
 onMounted(() => {
   window.addEventListener('click', clickOtherElement)
 })
@@ -46,9 +60,9 @@ onMounted(() => {
     <div class="container">
       <div class="d-flex align-items-center justify-content-between">
         <RouterLink to="/">
-          <img src="@/assets/images/logo/logo.png" alt="">
+          <img class="header-logo" src="@/assets/images/logo/logo.png" alt="">
         </RouterLink>
-        <div class="d-flex align-items-center">
+        <div class="d-lg-flex align-items-center d-none">
           <div class="px-2">
             <div class="dropdown">
               <button
@@ -144,6 +158,13 @@ onMounted(() => {
             </div>
           </div>
         </div>
+        <button type="button" class="btn d-lg-none" @click="clickMenu">
+          <div :class="{ 'open': openMenu }" id="nav-icon4">
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+        </button>
       </div>
     </div>
   </div>

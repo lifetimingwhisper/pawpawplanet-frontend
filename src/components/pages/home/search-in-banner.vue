@@ -65,7 +65,7 @@ const search = () => {
       <div class="w-100 h-100 d-flex justify-content-center align-items-center">
         <div class="w-100 home-search">
           <div class="row">
-            <div class="col-5">
+            <div class="col-lg-5">
               <CustomSelect
                 v-model="serviceModel"
                 prepend-icon="service"
@@ -76,7 +76,7 @@ const search = () => {
                 @update-option="updateServiceType"
               />
             </div>
-            <div class="col-5">
+            <div class="col-lg-5">
               <CitySelect
                 v-model="location"
                 prepend-icon="map"
@@ -87,7 +87,7 @@ const search = () => {
                 @update:model="updateLocation"
               />
             </div>
-            <div class="col-2 d-flex align-self-end">
+            <div class="col-lg-2 d-flex align-self-end">
               <div class="w-100 py-3">
                 <ButtonComponent
                   class="btn-primary"

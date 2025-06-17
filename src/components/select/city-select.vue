@@ -94,7 +94,7 @@ onUnmounted(() => {
 <template>
   <div ref="city" class="custom-input">
     <label v-if="label.length > 0" for="service" class="home-search-label">{{ label }}</label>
-    <div class="py-3 position-relative">
+    <div class="py-lg-3 py-2 position-relative">
       <div class="custom-input-input" :class="{ 'bg-transparent': backgroundIsTransparent }">
         <div v-if="prependIcon.length > 0" class="flex-0">
           <SvgIcon :name="prependIcon" color="#452B14" :size="28" />

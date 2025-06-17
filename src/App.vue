@@ -1,16 +1,29 @@
 <script setup>
+import { onMounted } from 'vue'
 import { RouterView } from 'vue-router'
-// import { useToast } from '@/plugins/toast/toast-plugin.js'
+import { useDeviceStore } from '@/stores/device.js'
 
-// const toast = useToast()
-//
-// const show = () => {
-//   toast.show('已刪除商品', 'error')
-// }
-//
-// onMounted(() => {
-//   show()
-// })
+const deviceStore = useDeviceStore()
+
+const updateDevice = () => {
+  const width = document.documentElement.clientWidth;
+  if (width < 992) {
+    deviceStore.changeMobileScreen(true)
+  } else {
+    deviceStore.changeMobileScreen(false)
+  }
+}
+onMounted(() => {
+  updateDevice()
+  window.onresize = () => (() => {
+    const width = document.documentElement.clientWidth;
+    if (width < 992) {
+      deviceStore.changeMobileScreen(true)
+    } else {
+      deviceStore.changeMobileScreen(false)
+    }
+  })();
+})
 </script>
 
 <template>

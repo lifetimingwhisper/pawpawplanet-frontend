@@ -1,4 +1,10 @@
 <script setup>
+import { useDeviceStore } from '@/stores/device.js'
+import { storeToRefs } from 'pinia'
+
+const deviceStore = useDeviceStore()
+
+const { is_mobile } = storeToRefs(deviceStore)
 </script>
 <template>
   <div class="w-100 bg-secondary-tint py-6">
@@ -9,7 +15,7 @@
           <p class="home-use-text">立即將您的寵物與接案服務者配對</p>
         </div>
         <div class="row">
-          <div class="col">
+          <div class="col-lg">
             <div class="w-100 d-flex flex-column align-items-center">
               <div class="home-use-img">
                 <img class="w-100" src="@/assets/images/home/request.png" alt="">
@@ -20,12 +26,12 @@
               </div>
             </div>
           </div>
-          <div class="col">
-            <div class="w-100 h-100 d-flex justify-content-center align-items-center">
-              <SvgIcon name="arrow" :size="44" />
+          <div class="col-lg">
+            <div class="w-100 h-100 d-flex justify-content-center align-items-center py-4 py-lg-0">
+              <SvgIcon name="arrow" :size="is_mobile ? 28 : 44" color="#A87D57" :style="{ 'transform': is_mobile ? 'rotate(90deg)' : 'rotate(0deg)' }" />
             </div>
           </div>
-          <div class="col">
+          <div class="col-lg">
             <div class="w-100 d-flex flex-column align-items-center">
               <div class="home-use-img">
                 <img class="w-100" src="@/assets/images/home/match.png" alt="">
@@ -36,12 +42,12 @@
               </div>
             </div>
           </div>
-          <div class="col">
-            <div class="w-100 h-100 d-flex justify-content-center align-items-center">
-              <SvgIcon name="arrow" :size="44" />
+          <div class="col-lg">
+            <div class="w-100 h-100 d-flex justify-content-center align-items-center py-4 py-lg-0">
+              <SvgIcon name="arrow" :size="is_mobile ? 28 : 44" color="#A87D57" :style="{ 'transform': is_mobile ? 'rotate(90deg)' : 'rotate(0deg)' }" />
             </div>
           </div>
-          <div class="col">
+          <div class="col-lg">
             <div class="w-100 d-flex flex-column align-items-center">
               <div class="home-use-img">
                 <img class="w-100" src="@/assets/images/home/meet.png" alt="">
@@ -52,12 +58,12 @@
               </div>
             </div>
           </div>
-          <div class="col">
-            <div class="w-100 h-100 d-flex justify-content-center align-items-center">
-              <SvgIcon name="arrow" :size="44" />
+          <div class="col-lg">
+            <div class="w-100 h-100 d-flex justify-content-center align-items-center py-4 py-lg-0">
+              <SvgIcon name="arrow" :size="is_mobile ? 28 : 44" color="#A87D57" :style="{ 'transform': is_mobile ? 'rotate(90deg)' : 'rotate(0deg)' }" />
             </div>
           </div>
-          <div class="col">
+          <div class="col-lg">
             <div class="w-100 d-flex flex-column align-items-center">
               <div class="home-use-img">
                 <img class="w-100" src="@/assets/images/home/confirm.png" alt="">

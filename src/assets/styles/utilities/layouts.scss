@@ -8,6 +8,9 @@
   background: $secondary-tint;
   &-content {
     min-height: 100vh;
-    padding-top: var(--app-bar-height);
+    padding-top: var(--app-bar-height-sm);
+    @media (min-width: 992px) {
+      padding-top: var(--app-bar-height);
+    }
   }
 }

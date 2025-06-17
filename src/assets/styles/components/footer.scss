@@ -1,9 +1,15 @@
 .footer {
   border-top-left-radius: 200px;
   border-top-right-radius: 200px;
-  padding: 60px;
+  padding: 60px 12px 24px 12px;
+  @media (min-width: 992px) {
+    padding: 60px;
+  }
   &-logo {
-    max-width: 400px;
+    max-width: 141px;
+    @media (min-width: 992px) {
+      max-width: 400px;
+    }
   }
   &-lists {
     max-width: 640px;
@@ -12,10 +18,13 @@
   &-li {
     list-style: none;
     a {
-      font-size: 20px;
+      font-size: 16px;
       font-weight: 700;
       color: $primary-dark-second;
       text-decoration: none;
+      @media (min-width: 992px) {
+        font-size: 20px;
+      }
       &:hover {
         color: $primary-tint !important;
       }
