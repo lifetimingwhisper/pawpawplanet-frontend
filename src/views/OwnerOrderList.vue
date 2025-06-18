@@ -5,12 +5,10 @@
   import Modal from '@/components/modal/order-owner-modal.vue';
   import ReviewModal from '@/components/modal/order-owner-comment-modal.vue';
   import { getOrder, getSamedayOrder, patchOrder, postPayment, postReview } from '@/plugins/api/order-owners/order-owners.js';
-  import { storeToRefs } from 'pinia'
   import { useLoginStore } from '@/stores/login.js'
   import { useRouter, useRoute } from 'vue-router';
 
   const loginStore = useLoginStore()
-  const { is_login, user } = storeToRefs(loginStore)
 
   const router = useRouter();
   const route = useRoute();
@@ -62,10 +60,10 @@
         // console.log('tag 或 page 變更了，但只執行一次 API');
         getOrderApi();
       }, 100); // 延遲 100ms，避免短時間內連續觸發
-  }, { immediate: true });
-
+  }, { immediate: true });  
+  
   onMounted(async () => {
-    if (!is_login || user.role !== 'owner') {
+    if (!loginStore.is_login || loginStore.user.role !== 'owner') {
       await router.push('/')
       return
     }
