@@ -179,7 +179,7 @@ onMounted(async () => {
                   <div class="badge rounded-pill bg-primary-dark">區域</div>
                 </div>
                 <div class="py-1">
-                  <p class="reserve-text fw-bold mb-0">{{ `${info.freelancer.user.city} ${info.freelancer.user.area}` }}</p>
+                  <p class="reserve-text fw-bold mb-0">{{ `${info.freelancer?.user.city} ${info.freelancer?.user.area}` }}</p>
                 </div>
               </div>
             </div>

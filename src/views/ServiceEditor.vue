@@ -1,5 +1,6 @@
 <template>
   <div class="py-4">
+    <Loading :show="loading" />
     <h4 class="mb-3 text-primary-dark-second">
       <i :class="service.icon" class="me-2"></i>
       {{ service.label }}
@@ -221,6 +222,7 @@
 </template>
 
 <script setup>
+import Loading from '@/components/loading/loading-component.vue'
 import { ref, computed, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import FileUpload from 'vue-upload-component'
@@ -235,6 +237,7 @@ const route = useRoute()
 const router = useRouter()
 const toast = useToast()
 const type = route.params.type
+const loading = ref(true)
 
 //錯誤訊息內容
 const errors = ref({})
@@ -284,10 +287,17 @@ onMounted(async () => {
 })
 
 async function init() {
-  const data = await getFreelancerServiceDetail(type)
-  console.log('initdata', data)
-  if (data) {
-    form.value = normalizeFormData(data)
+  try {
+    loading.value = true
+    const data = await getFreelancerServiceDetail(type)
+    console.log('initdata', data)
+    if (data) {
+      form.value = normalizeFormData(data)
+    }
+  } catch (e) {
+    console.log(e)
+  } finally {
+    loading.value = false
   }
 }
 //整理返回資料
@@ -418,6 +428,20 @@ const getImageUrls = (fileList = []) => {
 }
 </script>
 <style scoped lang="scss">
+::v-deep {
+  .loader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 999;
+    width: 100%;
+    height: 100%;
+    background: rgb(0 0 0 / 10%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
 .form-label {
   font-weight: 700;
   color: $primary-dark-second;
