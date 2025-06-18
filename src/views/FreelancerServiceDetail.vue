@@ -1,14 +1,9 @@
 <template>
   <div class="pet-service">
     <!-- 加載狀態 -->
-    <div v-if="loading" class="text-center py-5">
-      <div class="spinner-border text-primary" role="status">
-        <span class="visually-hidden">Loading...</span>
-      </div>
-    </div>
-
+    <Loading id="loader" :show="loading" />
     <!-- 主要內容 -->
-    <div v-else class="service-card d-flex justify-content-center">
+    <div class="service-card d-flex justify-content-center">
       <div class="service-content">
         <!-- 頭部信息區域 -->
         <div class="header-section">
@@ -50,7 +45,7 @@
         </div>
 
         <!-- 服務圖片輪播 -->
-        <div class="section" v-if="serviceInfo.images.length">
+        <div class="section" v-if="serviceInfo.images?.length">
           <div class="image-carousel">
             <div class="carousel-container" ref="carouselContainer">
               <div class="carousel-track">
@@ -171,7 +166,12 @@
           <div class="review-title text-primary-dark-second fw-bold d-flex align-items-center">
             評論 <span v-if="totalReviews" class="text-black-700">/{{ totalReviews }}則評價</span>
           </div>
-          <template v-if="totalReviews">
+          <template v-if="reviewLoading">
+            <div class="w-100 h-100 py-2 d-flex justify-content-center align-items-center">
+              <Loading :show="reviewLoading" />
+            </div>
+          </template>
+          <template v-else-if="totalReviews">
             <div class="review-container">
               <div v-for="review in reviews" :key="review.id" class="review-card">
                 <div class="review-header">
@@ -269,6 +269,7 @@
 </template>
 
 <script setup>
+import Loading from '@/components/loading/loading-component.vue'
 import ReserveModal from '@/components/modal/reserve-modal.vue'
 import { getServiceDetail, getServiceReviews } from '@/plugins/api/services/services.js'
 import { getFreelancerSchedule } from '@/plugins/api/freelancers/freelancers.js'
@@ -292,13 +293,16 @@ const route = useRoute()
 const serviceId = route.params.id
 
 const loading = ref(true)
+const reviewLoading = ref(true)
 const bookingLoading = ref(false)
 
 const showServiceInfo = computed(() => {
-  const { house_type, outdoor_area_size, pee_poo_times_per_day, walk_times_per_day } =
-    serviceInfo.value.extra_options
-
-  return house_type || outdoor_area_size || pee_poo_times_per_day || walk_times_per_day
+  if (serviceInfo.value.extra_options) {
+    const { house_type, outdoor_area_size, pee_poo_times_per_day, walk_times_per_day } =
+      serviceInfo.value.extra_options
+    return house_type || outdoor_area_size || pee_poo_times_per_day || walk_times_per_day
+  }
+  return false
 })
 // 響應式數據
 const freelancerProfile = ref({})
@@ -344,6 +348,7 @@ const fetchServiceDetail = async (id) => {
 // 獲取評價資訊
 const fetchReviews = async (page = 1) => {
   try {
+    reviewLoading.value = true
     const data = await getServiceReviews({
       service_id: serviceId,
       limit,
@@ -354,6 +359,8 @@ const fetchReviews = async (page = 1) => {
     totalPages.value = Math.ceil(data.total / limit)
   } catch (error) {
     console.error('取得評價資訊失敗:', error)
+  } finally {
+    reviewLoading.value = false
   }
 }
 
@@ -408,9 +415,22 @@ onMounted(async () => {
 </script>
 
 <style lang="scss" scoped>
+::v-deep {
+  #loader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 999;
+    width: 100%;
+    height: 100%;
+    background: rgb(0 0 0 / 10%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
 .pet-service {
   min-height: 100vh;
-  padding: 20px 0;
 }
 
 // 我要預約區域
@@ -493,7 +513,7 @@ onMounted(async () => {
 //主要內容
 .service-card {
   position: relative;
-  padding: 30px 0;
+  padding: 50px 0;
 }
 
 .service-content {
@@ -781,7 +801,7 @@ onMounted(async () => {
   //主要內容
   .service-card {
     margin: 0;
-    padding: 0;
+    padding: 20px 0;
   }
 
   .service-content {

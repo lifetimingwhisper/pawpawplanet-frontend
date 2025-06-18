@@ -1,5 +1,6 @@
 <template>
   <div class="form-box my-4">
+    <Loading :show="loading" />
     <div class="d-flex justify-content-between align-items-center mb-3">
       <h4 class="text-primary-dark-second">基本資料設定</h4>
       <button
@@ -53,6 +54,7 @@
 </template>
 
 <script setup>
+import Loading from '@/components/loading/loading-component.vue'
 import { ref, watch, onMounted } from 'vue'
 import isEqual from 'lodash/isEqual'
 import ProfileForm from '@/components/admin/freelancer/ProfileForm.vue'
@@ -90,6 +92,7 @@ const emptyForm = {
   services: [],
 }
 
+const loading = ref(true)
 const toast = useToast()
 //錯誤訊息內容
 const errors = ref({})
@@ -116,15 +119,22 @@ onMounted(async () => {
 })
 
 async function init() {
-  //取得保姆個人資料
-  const data = await getFreelancerProfile()
-  const normalizedData = normalizeFormData(data || {})
-  originalForm.value = normalizedData
-  tempForm.value = JSON.parse(JSON.stringify(normalizedData)) //深拷貝
-  //沒有填寫完整資料就預設為編輯模式
-  isEditMode.value = !normalizedData.name ? true : false
-  //已經完成資料填寫
-  isFinished.value = normalizedData.name ? true : false
+  try {
+    loading.value = true
+    //取得保姆個人資料
+    const data = await getFreelancerProfile()
+    const normalizedData = normalizeFormData(data || {})
+    originalForm.value = normalizedData
+    tempForm.value = JSON.parse(JSON.stringify(normalizedData)) //深拷貝
+    //沒有填寫完整資料就預設為編輯模式
+    isEditMode.value = !normalizedData.name ? true : false
+    //已經完成資料填寫
+    isFinished.value = normalizedData.name ? true : false
+  } catch (e) {
+    console.error(e)
+  } finally {
+    loading.value = false
+  }
 }
 
 //整理返回資料
@@ -245,6 +255,20 @@ hr {
   padding: 30px 15px;
   @media (min-width: 768px) {
     padding: 30px;
+  }
+}
+::v-deep {
+  .loader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 999;
+    width: 100%;
+    height: 100%;
+    background: rgb(0 0 0 / 10%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 }
 </style>
