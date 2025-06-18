@@ -39,6 +39,60 @@ export default function formatter(data) {
     return age;
   });
 
+  const statusBadgeMap = {
+    3: {
+      text: '保姆拒絕預約',
+      bgColorClass: '#CA4000',        
+      textColorClass: '#FFFFFF',   
+      iconName: 'rejected',      
+      iconColor: '#FFFFFF'            
+    },
+    4: {
+      text: '取消預約',
+      bgColorClass: '#B6B6B6',
+      textColorClass: '#FFFFFF',
+      iconName: 'cancelled',
+      iconColor: '#FFFFFF'
+    },
+    5: {
+      text: '逾期未付款',
+      bgColorClass: '#CA4000',
+      textColorClass: '#FFFFFF',
+      iconName: 'nopay',
+      iconColor: '#FFFFFF'
+    },
+    6: {
+      text: '保姆逾期未回覆',
+      bgColorClass: '#CA4000',
+      textColorClass: '#FFFFFF',
+      iconName: 'rejected',
+      iconColor: '#FFFFFF'
+    },
+    7: {
+      text: '訂單完成',
+      bgColorClass: '#648458',
+      textColorClass: '#FFFFFF',
+      iconName: 'completed',
+      iconColor: '#FFFFFF'
+    },
+        
+    default: {
+      text: '未知狀態',
+      bgColorClass: '#ECB88A',
+      textColorClass: '#FFFFFF',
+      iconName: 'bi-question-circle-fill',
+      iconColor: '#FFFFFF'
+    }
+  };
+  
+  const formatStatusBadge = (key) => computed(() => {
+    if (!data || data[key] === undefined || data[key] === null) {
+      return statusBadgeMap.default;
+    }
+
+    return statusBadgeMap[data[key]] || statusBadgeMap.default;
+  });
+
   return {
     formatSpecies: formatData('species_id'),
     formatGender: formatData('gender'),
@@ -49,6 +103,7 @@ export default function formatter(data) {
     formatStatus: formatData('status'),
     formatPaymentMethod: formatData('payment_method'),
     formatAge,
-    formatServerType: formatServerTypeData('service_type_id')
+    formatServerType: formatServerTypeData('service_type_id'),
+    formatStatusBadge: formatStatusBadge('status')
   };
 }
