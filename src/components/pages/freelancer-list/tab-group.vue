@@ -31,8 +31,8 @@ const onPress = (value) => {
 }
 </script>
 <template>
-  <div class="w-100">
-    <div class="row g-2 justify-content-between">
+  <div class="w-100 overflow-x-scroll">
+    <div class="row g-2 flex-nowrap justify-content-between">
       <div v-for="(tab, key) in tabGroup" class="freelancer-list-tab" :key="key">
         <button
           type="button"

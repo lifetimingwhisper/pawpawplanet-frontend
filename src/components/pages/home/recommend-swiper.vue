@@ -35,8 +35,10 @@ const modules = [Navigation]
 
 const onImageLoad = () => {
   nextTick(() => {
-    const width = picRef.value[0].getBoundingClientRect().width
-    picHeight.value = Math.round(width * 0.56)
+    if (picRef.value) {
+      const width = picRef.value[0].getBoundingClientRect().width
+      picHeight.value = Math.round(width * 0.56)
+    }
   })
 }
 </script>
