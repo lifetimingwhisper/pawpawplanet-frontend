@@ -84,7 +84,7 @@ onUnmounted(() => {
 <template>
   <div ref="select" class="custom-select">
     <label v-if="label.length > 0" for="service" class="home-search-label">{{ label }}</label>
-    <div class="py-lg-3 py-2 position-relative">
+    <div class="py-2 position-relative">
       <div class="custom-select-input" :class="{ 'bg-transparent': backgroundIsTransparent }" @click="onPress">
         <div v-if="prependIcon.length > 0" class="flex-0">
           <SvgIcon :name="prependIcon" color="#452B14" :size="28" />
