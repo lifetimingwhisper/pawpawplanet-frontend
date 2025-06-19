@@ -1,6 +1,7 @@
 <script setup>
-import SvgIcon from '@/components/svg-icon/svg-icon.vue'
 import { ref, computed, onMounted, nextTick, useTemplateRef, onUnmounted } from 'vue'
+import { useDeviceStore } from '@/stores/device.js'
+import { storeToRefs } from 'pinia'
 
 const props = defineProps({
   prependIcon: {
@@ -28,6 +29,10 @@ const props = defineProps({
     default: 'select'
   },
 })
+
+const deviceStore = useDeviceStore()
+
+const { is_mobile } = storeToRefs(deviceStore)
 
 const emit = defineEmits(['updateOption'])
 
@@ -79,7 +84,7 @@ onUnmounted(() => {
 <template>
   <div ref="select" class="custom-select">
     <label v-if="label.length > 0" for="service" class="home-search-label">{{ label }}</label>
-    <div class="py-3 position-relative">
+    <div class="py-2 position-relative">
       <div class="custom-select-input" :class="{ 'bg-transparent': backgroundIsTransparent }" @click="onPress">
         <div v-if="prependIcon.length > 0" class="flex-0">
           <SvgIcon :name="prependIcon" color="#452B14" :size="28" />
@@ -104,7 +109,7 @@ onUnmounted(() => {
           @click="chooseOption(option)"
         >
           <div v-if="option.icon" class="me-2">
-            <SvgIcon :name="option.icon" :color="model === option.value ? '#ECB88A' : '#452B14'" :size="28" />
+            <SvgIcon :name="option.icon" :color="model === option.value ? '#ECB88A' : '#452B14'" :size="is_mobile ? 24 : 28" />
           </div>
           <p :class="{ 'text-primary': model === option.value }">
             {{ option.name }}

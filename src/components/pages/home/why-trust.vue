@@ -1,26 +1,31 @@
 <script setup>
-import SvgIcon from '@/components/svg-icon/svg-icon.vue'
+import { useDeviceStore } from '@/stores/device.js'
+import { storeToRefs } from 'pinia'
+
+const deviceStore = useDeviceStore()
+
+const { is_mobile } = storeToRefs(deviceStore)
 </script>
 <template>
   <div class="position-relative w-100 bg-secondary-tint py-4">
     <div class="home-trust-foot">
-      <img src="@/assets/images/home/foot_print.png" alt="">
+      <img class="w-100" src="@/assets/images/home/foot_print.png" alt="">
     </div>
     <div class="container">
       <div class="d-flex flex-column align-items-center">
         <div class="d-flex align-items-center">
-          <SvgIcon name="trust" :size="56" color="#A87D57" />
+          <SvgIcon name="trust" :size="is_mobile ? 28 : 56" color="#A87D57" />
           <div class="px-2">
             <h5 class="home-title">為何信任 PawPawPlanet ?</h5>
           </div>
         </div>
         <div class="w-100 py-5" style="z-index: 2">
-          <div class="row">
-            <div class="col-3">
+          <div class="row g-4">
+            <div class="col-lg-3">
               <div class="w-100 border border-3 border-primary p-4 bg-primary-tint home-trust-card">
-                <div class="w-100 d-flex align-items-center mb-4">
+                <div class="w-100 d-flex align-items-center mb-2 mb-lg-4">
                   <div class="home-trust-icon">
-                    <SvgIcon name="safety" :size="40" color="#A87D57" />
+                    <SvgIcon name="safety" :size="is_mobile ? 24 : 40" color="#A87D57" />
                   </div>
                   <div class="home-trust-title">
                     <p>安心托管</p>
@@ -31,11 +36,11 @@ import SvgIcon from '@/components/svg-icon/svg-icon.vue'
                 </div>
               </div>
             </div>
-            <div class="col-3">
+            <div class="col-lg-3">
               <div class="w-100 border border-3 border-primary p-4 bg-primary-tint home-trust-card">
-                <div class="w-100 d-flex align-items-center mb-4">
+                <div class="w-100 d-flex align-items-center mb-2 mb-lg-4">
                   <div class="home-trust-icon">
-                    <SvgIcon name="group" :size="40" color="#A87D57" />
+                    <SvgIcon name="group" :size="is_mobile ? 24 : 40" color="#A87D57" />
                   </div>
                   <div class="home-trust-title">
                     <p>專業團隊</p>
@@ -46,11 +51,11 @@ import SvgIcon from '@/components/svg-icon/svg-icon.vue'
                 </div>
               </div>
             </div>
-            <div class="col-3">
+            <div class="col-lg-3">
               <div class="w-100 border border-3 border-primary p-4 bg-primary-tint home-trust-card">
-                <div class="w-100 d-flex align-items-center mb-4">
+                <div class="w-100 d-flex align-items-center mb-2 mb-lg-4">
                   <div class="home-trust-icon">
-                    <SvgIcon name="sociality" :size="40" color="#A87D57" />
+                    <SvgIcon name="sociality" :size="is_mobile ? 24 :  40" color="#A87D57" />
                   </div>
                   <div class="home-trust-title">
                     <p>社交互動</p>
@@ -61,11 +66,11 @@ import SvgIcon from '@/components/svg-icon/svg-icon.vue'
                 </div>
               </div>
             </div>
-            <div class="col-3">
+            <div class="col-lg-3">
               <div class="w-100 border border-3 border-primary p-4 bg-primary-tint home-trust-card">
-                <div class="w-100 d-flex align-items-center mb-4">
+                <div class="w-100 d-flex align-items-center mb-2 mb-lg-4">
                   <div class="home-trust-icon">
-                    <SvgIcon name="care" :size="40" color="#A87D57" />
+                    <SvgIcon name="care" :size="is_mobile ? 24 :  40" color="#A87D57" />
                   </div>
                   <div class="home-trust-title">
                     <p>客製化照護</p>

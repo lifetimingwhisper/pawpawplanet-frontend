@@ -37,7 +37,7 @@ const updateSort = (value) => {
 </script>
 <template>
   <div class="w-100 pt-3">
-    <div class="d-flex flex-wrap">
+    <div class="d-flex flex-wrap align-items-center">
       <div class="flex-1">
         <p class="freelancer-list-num">共 {{ total }} 個搜尋結果</p>
       </div>

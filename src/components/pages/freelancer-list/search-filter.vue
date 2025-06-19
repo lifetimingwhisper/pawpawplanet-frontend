@@ -84,8 +84,8 @@ const updateLocation = (value) => {
         />
       </div>
       <div class="col-12">
-        <div class="row g-2">
-          <div class="col-6">
+        <div class="row g-0">
+          <div class="col-12">
             <DatepickerSelect
               v-model="dateModel"
               prepend-icon="datepicker"
@@ -98,7 +98,7 @@ const updateLocation = (value) => {
               @update:modelValue="updateDate"
             />
           </div>
-          <div class="col-6">
+          <div class="col-12">
             <CustomSelect
               v-model="budgeModel"
               prepend-icon="budge"

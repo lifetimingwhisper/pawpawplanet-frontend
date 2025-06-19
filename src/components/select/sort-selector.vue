@@ -1,5 +1,7 @@
 <script setup>
 import { computed, ref, useTemplateRef, onMounted, nextTick, onUnmounted } from 'vue'
+import { useDeviceStore } from '@/stores/device.js'
+import { storeToRefs } from 'pinia'
 
 const props = defineProps({
   value: {
@@ -16,6 +18,9 @@ const emit = defineEmits(['updateSort'])
 
 const sort = useTemplateRef('sort')
 
+const deviceStore = useDeviceStore()
+
+const { is_mobile } = storeToRefs(deviceStore)
 
 const chooseValue = computed(() => {
   let value = {}
@@ -61,7 +66,7 @@ onUnmounted(() => {
     <button type="button" class="btn btn-link text-decoration-none sort-selector px-0" @click="onPress">
       <span class="d-flex align-items-center">
         <div style="width: 24px; height: 24px;">
-          <SvgIcon :name="chooseValue.icon" color="#452B14" :size="24"/>
+          <SvgIcon :name="chooseValue.icon" color="#452B14" :size="is_mobile? 20 : 24"/>
         </div>
         <p>{{ chooseValue.name }}</p>
       </span>

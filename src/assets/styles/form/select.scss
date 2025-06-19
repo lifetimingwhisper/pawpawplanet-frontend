@@ -17,10 +17,11 @@
   }
   &-options {
     width: 100%;
+    min-width: 300px;
     max-height: 0;
     position: absolute;
     left: 0;
-    top: 88px;
+    top: 74px;
     background: $white;
     border-radius: 20px;
     transition: max-height 0.1s ease;
@@ -51,9 +52,12 @@
     color: $black-900;
     cursor: pointer;
     p {
-      font-size: 20px;
+      font-size: 16px;
       color: $black-900;
       margin-bottom: 0;
+      @media (min-width: 992px) {
+        font-size: 20px;
+      }
     }
     &:hover {
       background: $black-100;
@@ -67,16 +71,22 @@
   input {
     width: 100%;
     padding: 12px 8px;
-    font-size: 20px;
+    font-size: 16px;
     color: $black-900;
     outline: none;
     background: transparent;
     border: none;
     cursor: pointer;
     &::placeholder {
-      font-size: 20px;
+      font-size: 16px;
       color: $black-600;
       line-height: 1;
+    }
+    @media (min-width: 992px) {
+      font-size: 20px;
+      &::placeholder {
+        font-size: 20px;
+      }
     }
   }
 }

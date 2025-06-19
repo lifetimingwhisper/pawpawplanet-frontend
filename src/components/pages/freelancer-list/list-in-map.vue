@@ -2,6 +2,8 @@
 import TabGroup from '@/components/pages/freelancer-list/tab-group.vue'
 import SearchFilter from '@/components/pages/freelancer-list/search-filter.vue'
 import SortAndNum from '@/components/pages/freelancer-list/sort-and-num.vue'
+import BottomDrawer from '@/components/bottom-drawer/bottom-drawer.vue'
+import FreelancerCard from '@/components/pages/freelancer-list/freelancer-card.vue'
 import {
   ref,
   reactive,
@@ -12,7 +14,8 @@ import {
   onActivated,
 } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
-import FreelancerCard from '@/components/pages/freelancer-list/freelancer-card.vue'
+import { useDeviceStore } from '@/stores/device.js'
+import { storeToRefs } from 'pinia'
 import { GoogleMap, MarkerCluster, CustomMarker } from 'vue3-google-map'
 import { getService } from '@/plugins/api/services/services.js'
 import Loading from '@/components/loading/loading-component.vue'
@@ -22,6 +25,10 @@ import calcRating from '@/utils/calculRating.js'
 const router = useRouter()
 
 const route = useRoute()
+
+const deviceStore = useDeviceStore()
+
+const { is_mobile } = storeToRefs(deviceStore)
 
 const center = { lat: 25.030724, lng: 121.520076 }
 
@@ -368,8 +375,12 @@ const closeDetail = () => {
 
 onMounted(async () => {
   await nextTick(() => {
-    // 計算列表的高度
-    outerHeight.value = freelancerOuter.value.offsetHeight - topHeight.value.offsetHeight - 24
+    if (!is_mobile.value) {
+      // 計算列表的高度
+      outerHeight.value = freelancerOuter.value.offsetHeight - topHeight.value.offsetHeight - 24
+    } else {
+      outerHeight.value = 560 - topHeight.value.offsetHeight - 40
+    }
     // 先計算 map 可視區寬度，再計算卡片顯示的寬度
     mapCardWidth.value = map.value.offsetWidth * 0.576
     imgHeightInCard.value = (mapCardWidth.value - 40) * 0.705
@@ -384,9 +395,9 @@ onActivated(() => {
 })
 </script>
 <template>
-  <div ref="freelancer-outer" class="w-100 border border-4 border-primary freelancer-list-section">
+  <div ref="freelancer-outer" class="border border-primary freelancer-list-section">
     <div class="h-100 row g-0">
-      <div class="col-6" :class="{ 'd-none': isExpand }">
+      <div class="col-6 d-none d-lg-block" :class="{ 'd-none': isExpand }">
         <div class="w-100 h-100 freelancer-list-search bg-white">
           <div ref="freelancer-top" class="w-100">
             <TabGroup :freelancer-type="request.service_type_id" @press="checkoutCategory" />
@@ -424,7 +435,7 @@ onActivated(() => {
           </div>
         </div>
       </div>
-      <div class="col-6" :class="{ 'col-12': isExpand }">
+      <div class="col-lg-6" :class="{ 'col-12': isExpand }">
         <div ref="map" class="w-100 h-100 position-relative">
           <GoogleMap
             :api-key="googleMapKey"
@@ -473,10 +484,10 @@ onActivated(() => {
                         class="btn position-absolute freelancer-list-location-card-btn p-1 bg-white rounded-circle d-flex justify-content-center align-items-center"
                         @click.stop.prevent="closeDetail"
                       >
-                        <SvgIcon name="cancel" color="#452B14" :size="44" />
+                        <SvgIcon name="cancel" color="#452B14" :size="is_mobile ? 20 : 44" />
                       </button>
                       <div class="position-absolute rounded-pill bg-primary d-flex align-items-center freelancer-list-card-badge p-1" style="bottom: 16px; left: 16px">
-                        <SvgIcon name="map" color="#452B14" />
+                        <SvgIcon name="map" color="#452B14" :size="is_mobile ? 20 : 24" />
                         <p class="fw-bold text-primary-dark-second">
                           {{ `${location.freelancer_info.city} ${location.freelancer_info.area}` }}
                         </p>
@@ -490,8 +501,8 @@ onActivated(() => {
                       </div>
                       <div class="w-100 py-2">
                         <div class="row gx-1 align-items-center">
-                          <div v-for="(index) in 5" class="px-1" style="width: 32px;" :key="index">
-                            <SvgIcon name="star" :color="calcRating(location.rating, index)" />
+                          <div v-for="(index) in 5" class="px-1" :style="{ 'width': is_mobile ? '20px' : '32px' }" :key="index">
+                            <SvgIcon name="star" :size="is_mobile ? 16 : 24" :color="calcRating(location.rating, index)" />
                           </div>
                           <div class="col">
                             <div class="px-2">
@@ -508,7 +519,7 @@ onActivated(() => {
               </CustomMarker>
             </MarkerCluster>
           </GoogleMap>
-          <div class="freelancer-list-sidebar position-absolute">
+          <div class="freelancer-list-sidebar position-absolute d-none d-lg-none">
             <button
               type="button"
               class="btn freelancer-list-expand bg-white rounded-circle d-flex align-items-center justify-content-center"
@@ -542,4 +553,40 @@ onActivated(() => {
       </div>
     </div>
   </div>
+  <BottomDrawer ref="drawerRef">
+    <div ref="freelancer-top" class="w-100">
+      <TabGroup :freelancer-type="request.service_type_id" @press="checkoutCategory" />
+      <SearchFilter
+        v-model:location="location"
+        v-model:date="date"
+        v-model:budge="budge"
+        :cond="request"
+        @update-budge="updateBudge"
+        @update-date="updateDate"
+        @update-location="updateLocation"
+      />
+      <SortAndNum :select-value="request.sort" :total="total" @update-sort="updateSort"/>
+    </div>
+    <div class="w-100 pb-4 freelancer-list-items" :style="{ 'height': `${outerHeight}px` }">
+      <template v-if="loading">
+        <div class="w-100 h-100 py-2 d-flex justify-content-center align-items-center">
+          <Loading :show="loading" />
+        </div>
+      </template>
+      <template v-else>
+        <template v-if="list.length > 0">
+          <div class="row gy-2">
+            <div v-for="(item, key) in list" class="col-12 py-2" :key="key">
+              <FreelancerCard :item="item" />
+            </div>
+          </div>
+        </template>
+        <template v-else>
+          <div class="w-100 h-100 py-2 d-flex justify-content-center align-items-center">
+            <p class="freelancer-list-items-nodata">無資料</p>
+          </div>
+        </template>
+      </template>
+    </div>
+  </BottomDrawer>
 </template>
