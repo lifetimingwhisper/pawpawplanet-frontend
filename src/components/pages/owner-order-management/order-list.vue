@@ -3,13 +3,11 @@ import OrderCard from '@/components/pages/owner-order-management/order-card.vue'
 import OrderSelectorModal from '@/components/pages/owner-order-management/order-selector-modal.vue';
 import { ref, watch, onMounted, nextTick } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
-import { storeToRefs } from 'pinia'
 import { useLoginStore } from '@/stores/login.js'
 import { getOrders } from '@/plugins/api/users/owners';
 import { patchOrderStatus, getOrdersAcceptedOnSameDate, postPayment, postReview } from '@/plugins/api/orders';
 
 const loginStore = useLoginStore()
-const { user } = storeToRefs(loginStore)
 const router = useRouter();
 const route = useRoute();
 

@@ -1,46 +1,56 @@
 <script setup>
+  import { computed } from 'vue';
   import formatter from '@/stores/formatter';
+
   const props = defineProps({
     orderData: Object,
     notModal: Boolean,
     pageData: Object
   });
-  const emit = defineEmits(['patchOrderApi', 'getSamedayOrderApi']);
+  const emit = defineEmits(['patchOrderApi', 'getSamedayOrderApi', 'postPaymentApi', 'presentReviewModal']);
   const { formatSpecies, formatGender, formatSize, formatAge } = formatter(props.orderData['pet']);
-  const { formatStatusType } = formatter(props.orderData['order']);
+  // const { formatStatus } = formatter(props.orderData['order']);
   const { formatServerType } = formatter(props.orderData['service']);
   const { formatPaymentMethod } = formatter(props.orderData['payment']);
+  const { formatStatusBadge } = formatter(props.orderData['order']);
+
+  const hasBadge = computed(() => {
+    return props.pageData.tag === 3 || props.pageData.tag === 4
+  });
 </script>
 <template>
-  <div v-if="orderData.order.status !== 0 && orderData.order.status !== 1 && orderData.order.status !== 2" class="d-inline-block text-white small rounded-top p-1" :style="{ background: formatStatusType.bgColor }">
-    <div class="d-flex align-items-center">
-      <SvgIcon :name="formatStatusType.icon" class="me-1" size="10px"/>
-      <span>{{ formatStatusType.name }}</span>
-    </div>
+  <div v-if="hasBadge && notModal" class="d-inline-block text-white small rounded-top p-1"
+    :style="{ backgroundColor: formatStatusBadge.bgColorClass, color: formatStatusBadge.textColorClass }">
+    <span>
+      <SvgIcon :name="formatStatusBadge.iconName" class="me-1" :color="formatStatusBadge.iconColor" size="10px"/>
+    </span>{{ formatStatusBadge.text }}
   </div>
-  <div class="card rounded-5 shadow-sm mb-3" :class="{ 'card-round': orderData.order.status !== 0 && orderData.order.status !== 1 && orderData.order.status !== 2 }">
+  <div class="card rounded-5 shadow-sm mb-3" :class="{ 'card-round': hasBadge && notModal }">
     <div class="card-body">
       <div class="row">
         <div :class="{ 'col-lg-7': notModal }">
           <div class="d-flex align-items-center mb-2">
-            <img v-if="orderData.owner.avatar" :src="orderData.owner.avatar" class="rounded-circle avatar me-3" alt="人物頭像" />
-            <SvgIcon v-if="!orderData.owner.avatar" name="user" class="rounded-circle avatar me-3" color="#452B14"/>
+            <img v-if="orderData.freelancer.avatar" :src="orderData.freelancer.avatar"
+              class="rounded-circle avatar me-3" alt="人物頭像" />
+            <SvgIcon v-if="!orderData.freelancer.avatar" name="user" class="rounded-circle avatar me-3"
+              color="#452B14" />
             <div>
-              <div class="fw-bold mb-1 ms-1">{{ orderData.owner.name }}</div>
+              <div class="fw-bold mb-1 ms-1">{{ orderData.freelancer.name }}</div>
               <div class="text-primary small">
-                <span class="text-black me-2">{{ orderData.owner.phone }} </span>
+                <span class="text-black me-2">{{ orderData.freelancer.phone }} </span>
                 <SvgIcon name="map" color="#ECB88A" class="me-1" :size="24" />
-                <span>{{ orderData.owner.city }} {{ orderData.owner.area }}</span>
+                <span>{{ orderData.freelancer.city }} {{ orderData.freelancer.area }}</span>
               </div>
             </div>
           </div>
-          <p class="text-muted small mb-3">{{ orderData.owner.description }}</p>
+          <p class="text-muted small mb-3">{{ orderData.freelancer.description }}</p>
           <hr class="text-muted">
           <div class="d-flex mb-3">
             <div class="text-center me-3">
               <div><span class="badge rounded-pill bg-primary text-dark mb-2">{{ formatSpecies }}</span></div>
-              <img v-if="orderData.pet.avatar" :src="orderData.pet.avatar" class="rounded-circle avatar mb-1" alt="寵物頭像" />
-              <SvgIcon v-if="!orderData.pet.avatar" name="user" class="rounded-circle avatar mb-1" color="#452B14"/>
+              <img v-if="orderData.pet.avatar" :src="orderData.pet.avatar" class="rounded-circle avatar mb-1"
+                alt="寵物頭像" />
+              <SvgIcon v-if="!orderData.pet.avatar" name="user" class="rounded-circle avatar mb-1" color="#452B14" />
               <div class="pet-name">{{ orderData.pet.name }}</div>
             </div>
             <div class="row w-100">
@@ -93,32 +103,40 @@
           </div>
           <div class="row">
             <div class="col-6">
-              <button v-if="notModal && pageData.tag === 0" class="btn btn-outline-primary w-100 text-dark rounded-pill p-3"  @click="emit('patchOrderApi', orderData.order.id, 'reject')">忍痛拒絕</button>
+              <button v-if="notModal && pageData.tag === 1"
+                class="btn btn-outline-primary w-100 text-dark rounded-pill p-3"
+                @click="emit('patchOrderApi', orderData.order.id, 'cancel')">取消</button>
             </div>
             <div class="col-6">
-              <button v-if="pageData.tag === 0" class="btn btn-primary w-100 rounded-pill p-3" @click="notModal ? emit('getSamedayOrderApi', orderData) : emit('patchOrderApi', orderData.order.id, 'accept')">接受預約</button>
-              <button v-if="pageData.tag === 3" class="btn btn-primary w-100 rounded-pill p-3" @click="emit('patchOrderApi', orderData.order.id, 'close')">確認</button>
+              <button v-if="notModal && pageData.tag === 0"
+                class="btn btn-outline-primary w-100 text-dark rounded-pill p-3"
+                @click="emit('patchOrderApi', orderData.order.id, 'cancel')">取消</button>
+              <button v-if="pageData.tag === 1" class="btn btn-primary w-100 rounded-pill p-3"
+                @click="notModal ? emit('getSamedayOrderApi', orderData) : emit('postPaymentApi', orderData.order.id)">付款</button>
+              <button v-if="pageData.tag === 3" class="btn btn-primary w-100 rounded-pill p-3"
+                @click="emit('patchOrderApi', orderData.order.id, 'close')">確認</button>
+              <button v-if="pageData.tag === 4 && orderData.order.status === 7 && (Object.keys(orderData.review).length === 0)"
+                class="btn btn-primary w-100 rounded-pill p-3"
+                @click="emit('presentReviewModal', orderData)">評論</button>
             </div>
           </div>
         </div>
       </div>
 
-      <div v-if="!(Object.keys(orderData.review).length === 0)" class="position-relative border rounded-4 text-center p-3 mt-2">
+      <div v-if="!(Object.keys(orderData.review).length === 0)"
+        class="position-relative border rounded-4 text-center p-3 mt-2">
         <div class="position-absolute top-0 start-50 translate-middle">
           <div class="text-brown fw-bold bg-white p-2">\ 評論 /</div>
         </div>
         <div class="mb-2">
-          <i
-            v-for="i in 5"
-            :key="i"
-            class="bi mx-1"
-            :class="i <= orderData.review.rating ? 'bi-star-fill text-warning' : 'bi-star text-muted'"
-          ></i>
+          <i v-for="i in 5" :key="i" class="bi mx-1"
+            :class="i <= orderData.review.rating ? 'bi-star-fill text-warning' : 'bi-star text-muted'"></i>
         </div>
         <p class="mb-0 text-dark">{{ orderData.review.comment }}</p>
       </div>
 
-      <div v-if="!(Object.keys(orderData.payment).length === 0)" class="border rounded-4 p-3 mt-2">
+      <div v-if="!(Object.keys(orderData.payment).length === 0) && orderData.payment.success"
+        class="border rounded-4 p-3 mt-2">
         <p>支付方式<span>｜</span>{{ formatPaymentMethod }}</p>
         <p>金額<span>｜</span>NT$ {{ orderData.payment.amount }}</p>
         <p>付款日期<span>｜</span>{{ orderData.payment.paid_at }}</p>
