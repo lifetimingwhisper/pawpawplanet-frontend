@@ -39,7 +39,14 @@
     formData.value.comment = '';
   };
 
-  defineExpose({ p_show: c_show });
+  function c_hide() {
+    modal.hide();
+  }
+  
+  defineExpose({ 
+    p_show: c_show,
+    p_hide: c_hide 
+  });
   //加入這段到父層
   // import { ref} from 'vue';
   // import Modal from '@/components/modal/order-owner-comment-modal.vue';

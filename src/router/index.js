@@ -11,6 +11,8 @@ import freelancerServicesRouter from '@/router/modules/freelancer-services.js'
 import freelancerListsRouter from '@/router/modules/freelancer-list.js'
 import freelancerListDetailRouter from '@/router/modules/freelancer-list-detail.js'
 import ownerOrderManagementRouter from '@/router/modules/owner-order-management.js'
+import ownerOrderListRouter from '@/router/modules/owner-order-list.js'
+
 
 import { useLoginStore } from '@/stores/login.js'
 
@@ -35,7 +37,8 @@ const router = createRouter({
         freelancerServicesRouter,
         freelancerListsRouter,
         freelancerListDetailRouter,
-        ownerOrderManagementRouter
+        ownerOrderManagementRouter,
+        ownerOrderListRouter
       ],
     },
   ],
