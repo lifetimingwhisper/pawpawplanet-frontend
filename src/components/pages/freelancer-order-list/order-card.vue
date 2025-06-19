@@ -1,7 +1,5 @@
 <script setup>
-  import { ref } from 'vue';
   import formatter from '@/stores/formatter';
-  const hasBadge = ref(true);
   const props = defineProps({
     orderData: Object,
     notModal: Boolean,
@@ -9,19 +7,18 @@
   });
   const emit = defineEmits(['patchOrderApi', 'getSamedayOrderApi']);
   const { formatSpecies, formatGender, formatSize, formatAge } = formatter(props.orderData['pet']);
-  const { formatStatus } = formatter(props.orderData['order']);
+  const { formatStatusType } = formatter(props.orderData['order']);
   const { formatServerType } = formatter(props.orderData['service']);
   const { formatPaymentMethod } = formatter(props.orderData['payment']);
-  // const payment = ref({
-  //   payment_method: 1,
-  //   amount: 200,
-  //   paid_at: '2024-03-22'
-  // })
-  // const { formatPaymentMethod } = formatter(payment.value);
 </script>
 <template>
-  <div v-if="hasBadge && notModal" class="d-inline-block bg-primary small rounded-top p-1"><span></span>{{ formatStatus }}</div>
-  <div class="card rounded-5 shadow-sm mb-3" :class="{ 'card-round': hasBadge && notModal }">
+  <div v-if="orderData.order.status !== 0 && orderData.order.status !== 1 && orderData.order.status !== 2" class="d-inline-block text-white small rounded-top p-1" :style="{ background: formatStatusType.bgColor }">
+    <div class="d-flex align-items-center">
+      <SvgIcon :name="formatStatusType.icon" class="me-1" size="10px"/>
+      <span>{{ formatStatusType.name }}</span>
+    </div>
+  </div>
+  <div class="card rounded-5 shadow-sm mb-3" :class="{ 'card-round': orderData.order.status !== 0 && orderData.order.status !== 1 && orderData.order.status !== 2 }">
     <div class="card-body">
       <div class="row">
         <div :class="{ 'col-lg-7': notModal }">
@@ -30,7 +27,8 @@
             <SvgIcon v-if="!orderData.owner.avatar" name="user" class="rounded-circle avatar me-3" color="#452B14"/>
             <div>
               <div class="fw-bold mb-1 ms-1">{{ orderData.owner.name }}</div>
-              <div class="d-flex align-items-center text-primary small">
+              <div class="text-primary small">
+                <span class="text-black me-2">{{ orderData.owner.phone }} </span>
                 <SvgIcon name="map" color="#ECB88A" class="me-1" :size="24" />
                 <span>{{ orderData.owner.city }} {{ orderData.owner.area }}</span>
               </div>
@@ -74,9 +72,12 @@
                   <p v-if="i == 4">備註<span>｜</span></p>
                 </div>
                 <div class="col-7 col-md-8 ps-0">
-                  <p v-if="i == 1" class="d-flex align-items-center">
-                    <SvgIcon :name="formatServerType.icon" color="#ECB88A" class="me-1" :size="24" />
-                    <span>{{ formatServerType.name }}</span>
+                  <p v-if="i == 1" class="d-flex">
+                    <span class="flex-grow-1 text-truncate">{{ orderData.service.title }}</span>
+                    <span class="flex-shrink-0">
+                      <SvgIcon :name="formatServerType.icon" color="#ECB88A" class="me-1" :size="24" />
+                      <span>{{ formatServerType.name }}</span>
+                    </span>
                   </p>
                   <p v-if="i == 2">{{ orderData.order.service_date }}</p>
                   <p v-if="i == 3">{{ orderData.service.city }} {{ orderData.service.area }}</p>
@@ -117,16 +118,11 @@
         <p class="mb-0 text-dark">{{ orderData.review.comment }}</p>
       </div>
 
-      <div v-if="!(Object.keys(orderData.payment).length === 0) && orderData.payment.success" class="border rounded-4 p-3 mt-2">
+      <div v-if="!(Object.keys(orderData.payment).length === 0)" class="border rounded-4 p-3 mt-2">
         <p>支付方式<span>｜</span>{{ formatPaymentMethod }}</p>
-        <p>金額<span>｜</span>{{ orderData.payment.amount }}</p>
+        <p>金額<span>｜</span>NT$ {{ orderData.payment.amount }}</p>
         <p>付款日期<span>｜</span>{{ orderData.payment.paid_at }}</p>
       </div>
-      <!-- <div v-if="!(Object.keys(payment).length === 0)" class="border rounded-4 p-3 mt-2">
-        <p>支付方式<span>｜</span>{{ formatPaymentMethod }}</p>
-        <p>金額<span>｜</span>{{ payment.amount }}</p>
-        <p>付款日期<span>｜</span>{{ payment.paid_at }}</p>
-      </div> -->
     </div>
   </div>
 </template>
