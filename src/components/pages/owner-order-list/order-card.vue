@@ -1,7 +1,7 @@
 <script setup>
-  import { ref, onMounted } from 'vue';
+  import { computed } from 'vue';
   import formatter from '@/stores/formatter';
-  const hasBadge = ref(true);
+
   const props = defineProps({
     orderData: Object,
     notModal: Boolean,
@@ -9,13 +9,13 @@
   });
   const emit = defineEmits(['patchOrderApi', 'getSamedayOrderApi', 'postPaymentApi', 'presentReviewModal']);
   const { formatSpecies, formatGender, formatSize, formatAge } = formatter(props.orderData['pet']);
-  const { formatStatus } = formatter(props.orderData['order']);
+  // const { formatStatus } = formatter(props.orderData['order']);
   const { formatServerType } = formatter(props.orderData['service']);
   const { formatPaymentMethod } = formatter(props.orderData['payment']);
   const { formatStatusBadge } = formatter(props.orderData['order']);
 
-  onMounted(() => {
-    hasBadge.value = props.pageData.tag === 3 || props.pageData.tag === 4
+  const hasBadge = computed(() => {
+    return props.pageData.tag === 3 || props.pageData.tag === 4
   });
 </script>
 <template>

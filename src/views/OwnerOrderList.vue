@@ -56,7 +56,10 @@
   let timer;
   watch([() => pageData.value.tag, () => pageData.value.page],
     ([newTag], [oldTag]) => {
-      if(newTag !== oldTag) pageData.value.page = 1;
+      if(newTag !== oldTag) {
+        ordersData.value = [];
+        pageData.value.page = 1;
+      }
       clearTimeout(timer);
       timer = setTimeout(() => {
         // console.log('tag 或 page 變更了，但只執行一次 API');
