@@ -19,10 +19,10 @@
   });
 </script>
 <template>
-  <div v-if="hasBadge && notModal" class="d-inline-flex align-items-center small rounded-top p-1"
+  <div v-if="hasBadge && notModal" class="d-inline-block text-white small rounded-top p-1"
     :style="{ backgroundColor: formatStatusBadge.bgColorClass, color: formatStatusBadge.textColorClass }">
     <span>
-      <SvgIcon :name="formatStatusBadge.iconName" class="me-1" :color="formatStatusBadge.iconColor" />
+      <SvgIcon :name="formatStatusBadge.iconName" class="me-1" :color="formatStatusBadge.iconColor" size="10px"/>
     </span>{{ formatStatusBadge.text }}
   </div>
   <div class="card rounded-5 shadow-sm mb-3" :class="{ 'card-round': hasBadge && notModal }">
@@ -36,9 +36,10 @@
               color="#452B14" />
             <div>
               <div class="fw-bold mb-1 ms-1">{{ orderData.freelancer.name }}</div>
-              <div class="d-flex align-items-center text-primary small">
+              <div class="text-primary small">
+                <span class="text-black me-2">{{ orderData.freelancer.phone }} </span>
                 <SvgIcon name="map" color="#ECB88A" class="me-1" :size="24" />
-                <span>{{ orderData.service.city }} {{ orderData.service.area }}</span>
+                <span>{{ orderData.freelancer.city }} {{ orderData.freelancer.area }}</span>
               </div>
             </div>
           </div>
@@ -81,9 +82,12 @@
                   <p v-if="i == 4">備註<span>｜</span></p>
                 </div>
                 <div class="col-7 col-md-8 ps-0">
-                  <p v-if="i == 1" class="d-flex align-items-center">
-                    <SvgIcon :name="formatServerType.icon" color="#ECB88A" class="me-1" :size="24" />
-                    <span>{{ formatServerType.name }}</span>
+                  <p v-if="i == 1" class="d-flex">
+                    <span class="flex-grow-1 text-truncate">{{ orderData.service.title }}</span>
+                    <span class="flex-shrink-0">
+                      <SvgIcon :name="formatServerType.icon" color="#ECB88A" class="me-1" :size="24" />
+                      <span>{{ formatServerType.name }}</span>
+                    </span>
                   </p>
                   <p v-if="i == 2">{{ orderData.order.service_date }}</p>
                   <p v-if="i == 3">{{ orderData.service.city }} {{ orderData.service.area }}</p>
@@ -134,14 +138,9 @@
       <div v-if="!(Object.keys(orderData.payment).length === 0) && orderData.payment.success"
         class="border rounded-4 p-3 mt-2">
         <p>支付方式<span>｜</span>{{ formatPaymentMethod }}</p>
-        <p>金額<span>｜</span>{{ orderData.payment.amount }}</p>
+        <p>金額<span>｜</span>NT$ {{ orderData.payment.amount }}</p>
         <p>付款日期<span>｜</span>{{ orderData.payment.paid_at }}</p>
       </div>
-      <!-- <div v-if="!(Object.keys(payment).length === 0)" class="border rounded-4 p-3 mt-2">
-        <p>支付方式<span>｜</span>{{ formatPaymentMethod }}</p>
-        <p>金額<span>｜</span>{{ payment.amount }}</p>
-        <p>付款日期<span>｜</span>{{ payment.paid_at }}</p>
-      </div> -->
     </div>
   </div>
 </template>

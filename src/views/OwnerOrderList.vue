@@ -244,17 +244,11 @@
       <template v-for=" tag in orderTags" :key="tag.value">
         <input type="radio" class="btn-check" name="orderTag" autocomplete="off" :id="'tag'+tag.value"
           :value="tag.value" v-model="pageData.tag">
-        <label class="btn btn-outline-primary rounded-4" :for="'tag'+tag.value">{{ tag.name }}</label>
+        <label class="btn btn-outline-dark rounded-4" :for="'tag'+tag.value">{{ tag.name }}</label>
       </template>
     </div>
-
-    <template v-if="loading">
-      <div class="w-100 h-100 py-2 d-flex justify-content-center align-items-center">
-        <Loading :show="loading" />
-      </div>
-    </template>
-
-    <div v-for="orderData in ordersData" :key="orderData.order.id">
+    <Loading :show="loading" class="flex-center" style="height: 300px;"/>
+    <div v-show="!loading" v-for="orderData in ordersData" :key="orderData.order.id">
       <OrderCard :notModal="true" :pageData="pageData" :orderData="orderData"
         @get-sameday-order-api="getSamedayOrderApi" @patch-order-api="patchOrderApi"
         @present-review-modal="presentReviewModal" @post-payment-api="postPaymentApi"></OrderCard>
@@ -262,7 +256,10 @@
 
     <div v-if="Object.keys(ordersData).length === 0 && !loading" class="flex-center" style="height: 300px;">無資料</div>
 
-    <OrderPagination :pageData="pageData" @change-page="changePage"></OrderPagination>
+    <div v-show="!loading">
+      <OrderPagination :pageData="pageData" @change-page="changePage"></OrderPagination>
+    </div>
+
     <Modal title="Modal1" ref="thisModal" :pageData="pageData" :samedayOrdersData="samedayOrdersData"
       :postPaymentApi="postPaymentApi">
       <template #header>您在 {{ samedayOrdersData?.[0]?.order?.service_date }} 有 {{ Object.keys(samedayOrdersData).length
@@ -278,5 +275,11 @@
     max-width: 516px;
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
+  }
+  input[type="radio"].btn-check{
+    &:checked + label, &:hover + label{
+      background-color: $primary-dark;
+      color: #fff;
+    }
   }
 </style>
