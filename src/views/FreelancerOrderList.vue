@@ -58,6 +58,10 @@
 
   function changePage(page){
     pageData.value.page = page;
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
   }
 
   async function getOrderApi(){
@@ -105,7 +109,7 @@
     <div class="overflow-x-auto d-flex bg-white rounded-5 mx-auto mb-3 p-2 gap-2">
       <template v-for="tag in orderTags" :key="tag.value">
         <input type="radio" class="btn-check" name="orderTag" autocomplete="off" :id="'tag'+tag.value" :value="tag.value" v-model="pageData.tag">
-        <label class="btn btn-outline-primary rounded-4" :for="'tag'+tag.value">{{ tag.name }}</label>
+        <label class="btn btn-outline-dark rounded-4" :for="'tag'+tag.value">{{ tag.name }}</label>
       </template>
     </div>
 
@@ -121,10 +125,16 @@
   </main>
 </template>
 <style scoped lang="scss">
-  .overflow-x-auto {
+  .overflow-x-auto{
     white-space: nowrap;
     max-width: 470px;
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
+  }
+  input[type="radio"].btn-check{
+    &:checked + label, &:hover + label{
+      background-color: $primary-dark;
+      color: #fff;
+    }
   }
 </style>
