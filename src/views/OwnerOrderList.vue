@@ -7,8 +7,10 @@
   import { getOrder, getSamedayOrder, patchOrder, postPayment, postReview } from '@/plugins/api/order-owners/order-owners.js';
   import { useLoginStore } from '@/stores/login.js'
   import { useRouter, useRoute } from 'vue-router';
+  import Loading from '@/components/loading/loading-component.vue'
 
   const loginStore = useLoginStore()
+  const loading = ref(false)
 
   const router = useRouter();
   const route = useRoute();
@@ -89,6 +91,7 @@
 
   async function getOrderApi(){
     try {
+      loading.value = true;
       // console.log('getOrderApi:' ,pageData.value);
       const getOrderOrigin = await getOrder(pageData.value);
       const getOrderData = getOrderOrigin.data;
@@ -96,39 +99,49 @@
       // console.log(getOrderData);
       pageData.value.total = getOrderOrigin.total;
       ordersData.value = getOrderData;
-    }catch (err){
+    } catch (err){
       console.log('錯誤getOrder', err);
+    } finally {
+      loading.value = false;
     }
   }
 
   async function getSamedayOrderApi(data){
     try {
-      console.log('getSamedayOrderApi:',data, data.order.id);
+      loading.value = true;
+      // console.log('getSamedayOrderApi:',data, data.order.id);
       let getSamedayOrdersData = await getSamedayOrder(data.order.id);
       console.log(getSamedayOrdersData);
       samedayOrdersData.value = [data, ...getSamedayOrdersData];
-      if(Object.keys(getSamedayOrdersData).length === 0) postPaymentApi(data.order.id);
-      else showModal();
-    }catch (err){
+      if(Object.keys(getSamedayOrdersData).length === 0) {
+        await postPaymentApi(data.order.id);
+      } else showModal();
+    } catch (err){
       console.log('錯誤getSameDayOrder', err);
+    } finally {
+      loading.value = false;
     }
   }
 
   async function patchOrderApi(id, action){
     try {
+      loading.value = true;
       let postData = { 'action': action }
       console.log('patchOrderApi:',id, action);
       let patchOrderData = await patchOrder(id, postData);
       console.log(patchOrderData);
       hideModal();
       pageData.value.tag = patchOrderData.target_tag.value;
-    }catch (err){
+    } catch (err){
       console.log('錯誤patchOrderApi', err);
+    } finally {
+      loading.value = false;
     }
   }
 
   async function postPaymentApi(id) {
     try{
+      loading.value = true;
       const ecpayParams = await postPayment(id)
       console.log('處理訂單付款，取得綠界資料: ', ecpayParams)
       if (!ecpayForm.value) { 
@@ -154,16 +167,26 @@
       ecpayForm.value.submit(); // 呼叫表單的 submit() 方法
     } catch(error) {
       console.log('錯誤postPaymentApi', err);
+    } finally {
+      loading.value = false;
     }
   }
 
   async function submitComment(formData, orderData) {
-    postReviewApi(formData, orderData);
-    orderDataBeingCommented.value = {};
-    hideReviewModal();
+    try {
+      loading.value = true;
+      orderDataBeingCommented.value = {};
+      hideReviewModal();
+      await postReviewApi(formData, orderData);
+    } catch(error) {
+      console.log('錯誤submitComment', err);
+    } finally {
+      loading.value = false;
+    }
   }
   async function postReviewApi(reviewData, orderData) {
     try {
+      loading.value = true;
       const data = {
         rating: reviewData.selectedRating,
         comment: reviewData.comment, 
@@ -174,6 +197,8 @@
       orderData.review.comment = reviewData.comment;
     } catch (err) {
       console.log('錯誤postReviewApi', err);
+    } finally {
+      loading.value = false;
     }
   }
 
@@ -193,12 +218,19 @@
       </template>
     </div>
 
+    <template v-if="loading">
+      <div class="w-100 h-100 py-2 d-flex justify-content-center align-items-center">
+        <Loading :show="loading" />
+      </div>
+    </template>
+
     <div v-for="orderData in ordersData" :key="orderData.order.id">
       <OrderCard :notModal="true" :pageData="pageData" :orderData="orderData"
         @get-sameday-order-api="getSamedayOrderApi" @patch-order-api="patchOrderApi"
         @present-review-modal="presentReviewModal" @post-payment-api="postPaymentApi"></OrderCard>
     </div>
-    <div v-if="Object.keys(ordersData).length === 0" class="flex-center" style="height: 300px;">無資料</div>
+
+    <div v-if="Object.keys(ordersData).length === 0 && !loading" class="flex-center" style="height: 300px;">無資料</div>
 
     <OrderPagination :pageData="pageData" @change-page="changePage"></OrderPagination>
     <Modal title="Modal1" ref="thisModal" :pageData="pageData" :samedayOrdersData="samedayOrdersData"
@@ -213,7 +245,7 @@
 <style scoped lang="scss">
   .overflow-x-auto {
     white-space: nowrap;
-    max-width: 470px;
+    max-width: 516px;
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
   }
