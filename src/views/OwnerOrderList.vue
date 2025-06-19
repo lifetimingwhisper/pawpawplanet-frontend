@@ -71,6 +71,33 @@
     }
   });
 
+  watch(
+    () => route.query,
+    (newQuery) => {
+      const newTag = parseInt(newQuery.tag, 10);
+
+      if (!Number.isNaN(newTag)) {
+        pageData.value.tag = newTag;
+      } 
+
+      if (Object.keys(newQuery).length > 0) {
+        router.replace({
+          name: 'owner-order-list',
+          
+        }).catch(err => {
+          if (router.isNavigationFailure(err) && err.name === 'NavigationDuplicated') {
+          } else {
+            console.error("路由替換失敗:", err);
+          }
+        });
+      } 
+    },
+    {
+      immediate: true,
+      deep: true
+    }
+  )
+
   function showModal(){
     thisModal.value.p_show();
   }
