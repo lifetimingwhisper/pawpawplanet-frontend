@@ -62,11 +62,16 @@ const masks = ref({
 const dateText = computed(() => {
   if (props.isRange) {
     const { start, end } = dateModel.value
+    console.log(start)
+    console.log(end)
     if (start) {
       const startDate = format(start, 'yyyy-MM-dd')
       if (end) {
         const endDate = format(end, 'yyyy-MM-dd')
         if (startDate !== endDate) {
+          if (start > end) {
+            return startDate
+          }
           return `${startDate}-${endDate}`
         } else {
           return startDate
