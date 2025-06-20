@@ -17,6 +17,43 @@
   const hasBadge = computed(() => {
     return props.pageData.tag === 3 || props.pageData.tag === 4
   });
+
+  const isServicedToday = computed(() => {
+    return props.orderData?.order?.service_date === formatToYYYYMMDDWithTimeZone(new Date())
+  });
+  
+  function formatToYYYYMMDDWithTimeZone(date, timeZone = 'Asia/Taipei') {
+    // 創建一個日期格式化器
+    const options = {
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+      timeZone: timeZone // 指定時區
+    };
+
+    const formatter = new Intl.DateTimeFormat('en-US', options); // 'en-US' 確保月份和日期是數字格式
+    const parts = formatter.formatToParts(date);
+
+    let year = '';
+    let month = '';
+    let day = '';
+
+    for (const part of parts) {
+      switch (part.type) {
+        case 'year':
+          year = part.value;
+          break;
+        case 'month':
+          month = part.value;
+          break;
+        case 'day':
+          day = part.value;
+          break;
+      }
+    }
+    return `${year}-${month}-${day}`;
+  }
+
 </script>
 <template>
   <div v-if="hasBadge && notModal" class="d-inline-block text-white small rounded-top p-1"
@@ -113,11 +150,14 @@
                 @click="emit('patchOrderApi', orderData.order.id, 'cancel')">取消</button>
               <button v-if="pageData.tag === 1" class="btn btn-primary w-100 rounded-pill p-3"
                 @click="notModal ? emit('getSamedayOrderApi', orderData) : emit('postPaymentApi', orderData.order.id)">付款</button>
+              <button v-if="pageData.tag === 2 && isServicedToday && (!(Object.keys(orderData.payment).length === 0) && orderData.payment.success)"
+                class="btn btn-primary w-100 rounded-pill p-3"
+                @click="emit('patchOrderApi', orderData.order.id, 'complete')">服務完成，結案</button>  
               <button v-if="pageData.tag === 3" class="btn btn-primary w-100 rounded-pill p-3"
                 @click="emit('patchOrderApi', orderData.order.id, 'close')">確認</button>
               <button v-if="pageData.tag === 4 && orderData.order.status === 7 && (Object.keys(orderData.review).length === 0)"
                 class="btn btn-primary w-100 rounded-pill p-3"
-                @click="emit('presentReviewModal', orderData)">評論</button>
+                @click="emit('presentReviewModal', orderData)">評論</button>  
             </div>
           </div>
         </div>
