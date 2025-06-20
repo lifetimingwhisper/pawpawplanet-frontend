@@ -46,6 +46,7 @@
       clearTimeout(timer);
       timer = setTimeout(() => {
         console.log('tag 或 page 變更了，但只執行一次 API');
+        ordersData.value = [];
         getOrderApi();
       }, 100); // 延遲 100ms，避免短時間內連續觸發
   }, { immediate: true });
