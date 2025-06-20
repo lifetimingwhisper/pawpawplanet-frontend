@@ -38,6 +38,8 @@ let total = ref(0)
 
 const topHeight = useTemplateRef('freelancer-top')
 
+const topHeightMobile = useTemplateRef('freelancer-top-mobile')
+
 const freelancerOuter = useTemplateRef('freelancer-outer')
 
 const map = useTemplateRef('map')
@@ -375,11 +377,11 @@ const closeDetail = () => {
 
 onMounted(async () => {
   await nextTick(() => {
-    if (!is_mobile.value) {
-      // 計算列表的高度
-      outerHeight.value = freelancerOuter.value.offsetHeight - topHeight.value.offsetHeight - 24
+    // 計算列表的高度
+    if (window.innerWidth >= 992) {
+      outerHeight.value = map.value.offsetHeight - topHeight.value.offsetHeight - 24
     } else {
-      outerHeight.value = 560 - topHeight.value.offsetHeight - 40
+      outerHeight.value = 560 - topHeightMobile.value.offsetHeight - 40
     }
     // 先計算 map 可視區寬度，再計算卡片顯示的寬度
     mapCardWidth.value = map.value.offsetWidth * 0.576
@@ -398,7 +400,7 @@ onActivated(() => {
   <div ref="freelancer-outer" class="border border-primary freelancer-list-section">
     <div class="h-100 row g-0">
       <div class="col-6 d-none d-lg-block" :class="{ 'd-none': isExpand }">
-        <div class="w-100 h-100 freelancer-list-search bg-white">
+        <div class="w-100 freelancer-list-search bg-white">
           <div ref="freelancer-top" class="w-100">
             <TabGroup :freelancer-type="request.service_type_id" @press="checkoutCategory" />
             <SearchFilter
@@ -412,7 +414,7 @@ onActivated(() => {
             />
             <SortAndNum :select-value="request.sort" :total="total" @update-sort="updateSort"/>
           </div>
-          <div class="w-100 pb-4 freelancer-list-items" :style="{ 'height': `${outerHeight}px` }">
+          <div class="w-100 freelancer-list-items" :style="{ 'height': `${outerHeight}px` }">
             <template v-if="loading">
               <div class="w-100 h-100 py-2 d-flex justify-content-center align-items-center">
                 <Loading :show="loading" />
@@ -554,7 +556,7 @@ onActivated(() => {
     </div>
   </div>
   <BottomDrawer ref="drawerRef">
-    <div ref="freelancer-top" class="w-100">
+    <div ref="freelancer-top-mobile" class="w-100">
       <TabGroup :freelancer-type="request.service_type_id" @press="checkoutCategory" />
       <SearchFilter
         v-model:location="location"
