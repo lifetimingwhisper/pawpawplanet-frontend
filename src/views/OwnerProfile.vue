@@ -70,7 +70,7 @@ const submitOwner = async (data) => {
     saveUserInfo(owner.value)
   } catch (error) {
     //console.error('送出失敗:', error);
-    alert('更新失敗，請稍後再試。')
+    toast.show('更新失敗，請稍後再試。', 'error')
   }
 }
 
