@@ -41,7 +41,7 @@ onMounted(async () => {
             <p class="home-recommend-description text-center">立即將您的寵物與接案服務者配對</p>
           </div>
         </div>
-        <Swiper :carousels="recommendations" :loading="loading"/>
+        <Swiper :carousels="recommendations" :loading="loading" />
       </div>
     </div>
   </div>
