@@ -175,7 +175,13 @@
             <div class="review-container">
               <div v-for="review in reviews" :key="review.id" class="review-card">
                 <div class="review-header">
-                  <img :src="review.owner_avatar" :alt="review.owner_name" class="review-avatar" />
+                  <img
+                    v-if="review?.owner_avatar?.[0]"
+                    :src="review?.owner_avatar?.[0]"
+                    :alt="review.owner_name"
+                    class="freelancer-avatar"
+                  />
+                  <SvgIcon v-else name="user" color="#452B14" class="freelancer-avatar" />
                   <div class="review-info">
                     <div class="reviewer-name fw-bold text-primary-dark-second">
                       {{ review.owner_name }}
