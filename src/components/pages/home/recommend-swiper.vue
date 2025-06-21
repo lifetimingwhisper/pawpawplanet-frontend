@@ -1,4 +1,5 @@
 <script setup>
+import Loading from '@/components/loading/loading-component.vue'
 import { Swiper, SwiperSlide } from 'swiper/vue'
 import { Navigation } from 'swiper/modules'
 import 'swiper/css'
@@ -85,67 +86,74 @@ const onImageLoad = () => {
         :space-between="16"
         :navigation="{ nextEl: '#next', prevEl: '#prev' }"
       >
-        <template v-if="!loading && carousels.length > 0">
-          <swiper-slide v-for="(item, key) in carousels" :key="key">
-            <RouterLink :to="`service/${item.id}`" class="w-100 home-recommend-card">
-              <div class="w-100 pb-1 pb-lg-3 home-recommend-card-top">
-                <div class="home-recommend-card-img mb-2 mb-lg-3" :style="{ 'height': `${picHeight}px` }">
-                  <img :ref="`recommend-pic-${key + 1}`" :src="item.image" alt="" @load="onImageLoad">
+        <template v-if="!loading">
+          <template v-if="carousels.length > 0">
+            <swiper-slide v-for="(item, key) in carousels" :key="key">
+              <RouterLink :to="`service/${item.id}`" class="w-100 home-recommend-card">
+                <div class="w-100 pb-1 pb-lg-3 home-recommend-card-top">
+                  <div class="home-recommend-card-img mb-2 mb-lg-3" :style="{ 'height': `${picHeight}px` }">
+                    <img :ref="`recommend-pic-${key + 1}`" :src="item.image" alt="" @load="onImageLoad">
+                  </div>
+                  <h5 class="home-recommend-card-name text-center">{{ item.freelancer_name }}</h5>
                 </div>
-                <h5 class="home-recommend-card-name text-center">{{ item.freelancer_name }}</h5>
-              </div>
-              <div class="w-100 pt-3 home-recommend-card-bottom">
-                <div class="row gy-3">
-                  <div class="col-12">
-                    <div class="w-100 d-flex align-items-center">
-                      <div class="home-recommend-card-left">
-                        <p>評價</p>
-                      </div>
-                      <div class="home-recommend-card-right ps-4">
-                        <div class="w-100">
-                          <div class="home-recommend-card-row">
-                            <div v-for="(index) in 5" class="home-recommend-card-icon" :key="index">
-                              <SvgIcon name="star" :size="is_mobile ? 24 : 28" :color="calculRating(item.rating, index)" />
+                <div class="w-100 pt-3 home-recommend-card-bottom">
+                  <div class="row gy-3">
+                    <div class="col-12">
+                      <div class="w-100 d-flex align-items-center">
+                        <div class="home-recommend-card-left">
+                          <p>評價</p>
+                        </div>
+                        <div class="home-recommend-card-right ps-4">
+                          <div class="w-100">
+                            <div class="home-recommend-card-row">
+                              <div v-for="(index) in 5" class="home-recommend-card-icon" :key="index">
+                                <SvgIcon name="star" :size="is_mobile ? 24 : 28" :color="calculRating(item.rating, index)" />
+                              </div>
                             </div>
                           </div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                  <div class="col-12">
-                    <div class="w-100 d-flex align-items-center">
-                      <div class="home-recommend-card-left">
-                        <p>服務内容</p>
-                      </div>
-                      <div class="home-recommend-card-right ps-4">
-                        <div class="w-100">
-                          <p class="home-recommend-card-text">
-                            {{ serviceTypeId[item.service_type_id] }}
-                          </p>
+                    <div class="col-12">
+                      <div class="w-100 d-flex align-items-center">
+                        <div class="home-recommend-card-left">
+                          <p>服務内容</p>
+                        </div>
+                        <div class="home-recommend-card-right ps-4">
+                          <div class="w-100">
+                            <p class="home-recommend-card-text">
+                              {{ serviceTypeId[item.service_type_id] }}
+                            </p>
+                          </div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                  <div class="col-12">
-                    <div class="w-100 d-flex align-items-center">
-                      <div class="home-recommend-card-left">
-                        <p>價格</p>
-                      </div>
-                      <div class="home-recommend-card-right ps-4">
-                        <div class="w-100">
-                          <p class="home-recommend-card-text">NT$ {{ item.price }}/{{ item.price_unit }}</p>
+                    <div class="col-12">
+                      <div class="w-100 d-flex align-items-center">
+                        <div class="home-recommend-card-left">
+                          <p>價格</p>
+                        </div>
+                        <div class="home-recommend-card-right ps-4">
+                          <div class="w-100">
+                            <p class="home-recommend-card-text">NT$ {{ item.price }}/{{ item.price_unit }}</p>
+                          </div>
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            </RouterLink>
-          </swiper-slide>
+              </RouterLink>
+            </swiper-slide>
+          </template>
+          <template v-else>
+            <div class="w-100 d-flex justify-content-center align-items-center" style="height:513px">
+              <p class="home-recommend-nodata mb-0">暫無寵物保姆推薦</p>
+            </div>
+          </template>
         </template>
         <template v-else>
           <div class="w-100 d-flex justify-content-center align-items-center" style="height:513px">
-            <p class="home-recommend-nodata mb-0">暫無寵物保姆推薦</p>
+            <Loading :show="loading" />
           </div>
         </template>
       </swiper>
