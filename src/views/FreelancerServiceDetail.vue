@@ -1,9 +1,9 @@
 <template>
   <div class="pet-service">
     <!-- 加載狀態 -->
-    <Loading id="loader" :show="loading" />
+    <Loading v-if="loading" id="loader" :show="loading" />
     <!-- 主要內容 -->
-    <div class="service-card d-flex justify-content-center">
+    <div v-else class="service-card d-flex justify-content-center">
       <div class="service-content">
         <!-- 頭部信息區域 -->
         <div class="header-section">
@@ -179,9 +179,9 @@
                     v-if="review?.owner_avatar?.[0]"
                     :src="review?.owner_avatar?.[0]"
                     :alt="review.owner_name"
-                    class="freelancer-avatar"
+                    class="review-avatar"
                   />
-                  <SvgIcon v-else name="user" color="#452B14" class="freelancer-avatar" />
+                  <SvgIcon v-else name="user" color="#452B14" class="review-avatar" />
                   <div class="review-info">
                     <div class="reviewer-name fw-bold text-primary-dark-second">
                       {{ review.owner_name }}
