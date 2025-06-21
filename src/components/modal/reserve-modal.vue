@@ -221,7 +221,7 @@ onMounted(async () => {
                   <p class="d-flex align-items-center px-2 mb-0" style="font-size: 14px">
                     標示
                     <span class="rounded-circle mx-1" style="width: 12px; height: 12px; background: #ef4444"></span>
-                    為已預約日期
+                    為您已有付款預約的日期
                   </p>
                 </div>
                 <div class="py-1">
