@@ -3,7 +3,9 @@ import { onMounted, ref, reactive } from 'vue'
 import Modal from 'bootstrap/js/dist/modal'
 import FileUpload from 'vue-upload-component'
 import { uploadImage } from '@/plugins/api/upload/upload.js'
+import { useToast } from '@/plugins/toast/toast-plugin.js'
 
+const toast = useToast()
 const prop = defineProps({
   title: String,
   hasPet: Boolean,
@@ -134,14 +136,14 @@ const petFilter = (newFile, oldFile, prevent) => {
   if (!newFile || !newFile.file) return
 
   if (!/\.(jpeg|jpg|png)$/i.test(newFile.name)) {
-    alert('格式錯誤')
+    toast.show('格式錯誤', 'error')
     remove(newFile)
     prevent()
     return
   }
 
   if (newFile.size / 1024 / 1024 > 5) {
-    alert('图片大小不能超过5MB')
+    toast.show('图片大小不能超过5MB', 'error')
     remove(newFile)
     prevent()
     return
@@ -156,7 +158,7 @@ const petFilter = (newFile, oldFile, prevent) => {
 const handlePetInput = async (newFile) => {
   if (!newFile || !newFile.file) return
   if (newFile.size / 1024 / 1024 > 5) {
-    alert('檔案不能超過 5MB')
+    toast.show('檔案不能超過 5MB', 'error')
     remove(newFile)
     return
   }
@@ -172,7 +174,7 @@ const handlePetInput = async (newFile) => {
     newFile.uploading = false // 圖片上傳完成
   } catch (err) {
     console.error('圖片上傳失敗:', err)
-    alert('圖片上傳失敗，請重試')
+    toast.show('圖片上傳失敗，請重試', 'error')
     remove(newFile) //移除這筆失敗的檔案
   }
 }
