@@ -739,7 +739,7 @@ onMounted(async () => {
   }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 992px) {
   // 我要預約區域
   .booking-fixed {
     position: fixed;
