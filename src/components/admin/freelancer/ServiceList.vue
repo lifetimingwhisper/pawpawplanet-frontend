@@ -10,7 +10,7 @@
       >
         <div class="text-primary-dark-second">
           <i :class="item.icon"></i> {{ item.name }}
-          <div v-if="item.created" class="ms-4 text-black">
+          <div v-if="item.serviceData?.enabled && item.created" class="ms-4 text-black">
             <small> 價格：{{ item.serviceData.price_unit }}費用 </small>
             <br />
             <small> {{ item.serviceData.price }} TWD </small>
@@ -28,7 +28,7 @@
       >
         <div class="text-primary-dark-second">
           <i :class="item.icon"></i> {{ item.name }}
-          <div v-if="item.created" class="ms-4 text-black">
+          <div v-if="item.serviceData?.enabled && item.created" class="ms-4 text-black">
             <small> 價格：{{ item.serviceData.price_unit }}費用 </small>
             <br />
             <small> {{ item.serviceData.price }} TWD </small>
