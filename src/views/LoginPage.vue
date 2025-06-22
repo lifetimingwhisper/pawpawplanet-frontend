@@ -62,28 +62,14 @@ const submitForm = async () => {
 
     try {
       const data = await loginUser(formData);
-      console.log('登入成功:', data);
       const token = data.token;
-      console.log("test token:",token);
       localStorage.setItem('token', token);
       changeLoginStatus(true)
       toast.show('登入成功', 'success')
-      //console.log("test token:", localStorage.getItem('token'));
-      //alert('登入成功 !');
-      //router.push('/ownerprofile');
       const base64Url = token.split('.')[1];
       const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
       const payload = JSON.parse(decodeURIComponent(escape(window.atob(base64))));
-      console.log('解析後的 payload:', payload);
-      await getUserInfo()
-      if (payload.role === 'owner') {
-        await router.push('/ownerprofile');
-      } else if (payload.role === 'freelancer') {
-        await router.push('/freelancer-info');
-      } else {
-        console.warn('未知角色:', payload.role);
-        errorMessage.value = '無法識別使用者角色';
-      }
+      await getUserInfo(payload)
     } catch (error) {
       console.error('登入失敗:', error.response?.data || error.message);
       if (error.response && error.response.data && error.response.data.message) {
@@ -103,6 +89,22 @@ const getUserInfo = async () => {
   }
   localStorage.setItem('user_info', JSON.stringify(userInfo))
   saveUserInfo(userInfo)
+  if (!userInfo.name) {
+    if (userInfo.role === 'owner') {
+      await router.push('/ownerprofile');
+    } else if (userInfo.role === 'freelancer') {
+      await router.push('/freelancer-info');
+    } else {
+      console.warn('未知角色:', userInfo.role);
+      errorMessage.value = '無法識別使用者角色';
+    }
+  } else {
+    if (window.history.state && window.history.state.back !== null) {
+      router.go(-1)
+    } else {
+      await router.push('/')
+    }
+  }
 }
 
 </script>
