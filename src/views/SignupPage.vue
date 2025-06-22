@@ -1,6 +1,7 @@
 <template>
   <!-- 註冊表單 + Icon -->
-  <div class="container py-5">
+  <div class="container py-5 position-relative">
+     <Loading :show="isLoading" size="60px" />
     <div class="row">
       <!-- 左側：註冊表單 -->
       <div class="col-md-8">
@@ -69,7 +70,7 @@
               <label class="form-check-label" for="roleContractor">接案者</label>
             </div>
           </div>
-          <button type="submit" class="btn btn-primary">註冊</button>
+          <button type="submit" class="btn btn-primary" :disabled="isLoading">註冊</button>
         </form>
         <p v-if="errorMessage" class="text-danger mt-3">{{ errorMessage }}</p>
       </div>
@@ -87,6 +88,7 @@ import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { registerUser } from '@/plugins/api/users/users.js' // 引入註冊 API 函數
 import { useToast } from '@/plugins/toast/toast-plugin.js'
+import Loading from '@/components/loading/loading-component.vue'
 
 const toast = useToast()
 const email = ref('')
@@ -96,14 +98,18 @@ const role = ref('owner')
 const errorMessage = ref('')
 
 const router = useRouter()
+const isLoading = ref(false); 
 
 const submitForm = async () => {
   errorMessage.value = ''
+  
 
   if (password.value !== confirmPassword.value) {
     errorMessage.value = '密碼和確認密碼不一致'
     return
   }
+
+  isLoading.value = true;
 
   const formData = {
     email: email.value,
@@ -126,6 +132,10 @@ const submitForm = async () => {
     } else {
       errorMessage.value = '註冊失敗，請稍後再試。'
     }
-  }
+  } finally {
+      isLoading.value = false;  // 無論成功或失敗都關閉loading
+    }
+
+
 }
 </script>
