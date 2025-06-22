@@ -1,6 +1,7 @@
 <template>
   <!-- 登入表單與 Icon -->
-  <div class="container py-5">
+  <div class="container py-5 position-relative">
+    <Loading :show="isLoading" size="60px" />
     <div class="row">
       <!-- 左側：登入表單 -->
       <div class="col-md-8">
@@ -15,7 +16,7 @@
             <input type="password" class="form-control" placeholder="請輸入您的密碼" id="password" v-model="password" required>
           </div>
           <div class="d-flex align-items-center mt-3">
-            <button type="submit" class="btn btn-primary me-3">登入</button>
+            <button type="submit" class="btn btn-primary me-3" :disabled="isLoading">登入</button>
             <p v-if="errorMessage" class="text-danger mb-0">{{ errorMessage }}</p>
           </div>
         </form>
@@ -34,6 +35,7 @@
 </template>
 
 <script setup>
+import Loading from '@/components/loading/loading-component.vue'
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { loginUser, GetOwnerProfile } from '@/plugins/api/users/users.js';
@@ -46,11 +48,12 @@ const errorMessage = ref('');
 const router = useRouter();
 const { changeLoginStatus, saveUserInfo } = useLoginStore()
 const toast = useToast()
-
+const isLoading = ref(false); 
 
 const submitForm = async () => {
 
   errorMessage.value = '';
+  isLoading.value = true;
 
   const formData = {
     email: email.value,
@@ -77,7 +80,10 @@ const submitForm = async () => {
       } else {
         errorMessage.value = '登入失敗，請稍後再試。';
       }
+    } finally {
+      isLoading.value = false;  // 無論成功或失敗都關閉loading
     }
+
   };
 
 const getUserInfo = async () => {
