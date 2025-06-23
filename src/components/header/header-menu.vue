@@ -38,21 +38,23 @@ const clickLoginBtn = async () => {
     removeUserInfo(false)
     toast.show('登出成功', 'success')
     if (route.meta.verification_required) await router.push('/')
+    clickLink()
   } else {
     await router.push('/login')
+    clickLink()
   }
 }
 
 const clickRegisterBtn = () => {
   router.push('/signup')
+  clickLink()
 }
-
 </script>
 <template>
   <Transition name="slide">
     <div v-show="openMenu" class="position-fixed header-menu flex-column justify-content-between">
       <div class="w-100">
-        <SvgIcon name="paw_group" :size="56" color="#FFCF75" style="transform: scaleX(-1);" />
+        <SvgIcon name="paw_group" :size="56" color="#FFCF75" style="transform: scaleX(-1)" />
       </div>
       <ul class="header-menu-list d-flex align-items-center flex-column">
         <li>
@@ -95,24 +97,38 @@ const clickRegisterBtn = () => {
       </div>
       <div class="row g-3">
         <div v-if="is_login" class="col-12">
-          <div class="d-flex align-center justify-content-center">
-            <div class="header-avatar">
-              <!--                  無上傳會員大頭貼預設 svg-->
-              <SvgIcon v-if="!user?.avatar?.length" name="user" color="#452B14" size="20"/>
-              <!--                  上傳會員大頭貼顯示圖片-->
-              <img v-else :src="user.avatar[0]" alt="">
+          <RouterLink
+            v-if="user && user.role"
+            :to="user.role === 'freelancer' ? '/freelancer-info' : '/ownerprofile'"
+            @click="clickLink"
+          >
+            <div class="d-flex align-center justify-content-center">
+              <div class="header-avatar">
+                <!--                  無上傳會員大頭貼預設 svg-->
+                <SvgIcon v-if="!user?.avatar?.length" name="user" color="#452B14" size="20" />
+                <!--                  上傳會員大頭貼顯示圖片-->
+                <img v-else :src="user.avatar[0]" alt="" />
+              </div>
+              <div class="px-2 d-flex align-items-center">
+                <!--                  無填寫會員名稱預設 會員-->
+                <h4 class="header-name">{{ !user.name ? '會員' : user.name }}</h4>
+              </div>
             </div>
-            <div class="px-2 d-flex align-items-center">
-              <!--                  無填寫會員名稱預設 會員-->
-              <h4 class="header-name">{{ !user.name ? '會員' : user.name }}</h4>
-            </div>
-          </div>
+          </RouterLink>
         </div>
         <div class="col-12">
-          <ButtonComponent class="btn-primary" :text="is_login ? '登出' : '登入'" @on-press="clickLoginBtn" />
+          <ButtonComponent
+            class="btn-primary"
+            :text="is_login ? '登出' : '登入'"
+            @on-press="clickLoginBtn"
+          />
         </div>
         <div v-if="!is_login" class="col-12">
-          <ButtonComponent class="btn-outline-dark-second" text="註冊" @on-press="clickRegisterBtn" />
+          <ButtonComponent
+            class="btn-outline-dark-second"
+            text="註冊"
+            @on-press="clickRegisterBtn"
+          />
         </div>
       </div>
     </div>
