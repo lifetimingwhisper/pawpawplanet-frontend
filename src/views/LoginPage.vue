@@ -1,6 +1,6 @@
 <template>
   <!-- 登入表單與 Icon -->
-  <div class="container py-5 position-relative">
+  <div class="py-5 position-relative">
     <Loading :show="isLoading" size="60px" />
     <div class="row">
       <!-- 左側：登入表單 -->
@@ -48,7 +48,7 @@ const errorMessage = ref('');
 const router = useRouter();
 const { changeLoginStatus, saveUserInfo } = useLoginStore()
 const toast = useToast()
-const isLoading = ref(false); 
+const isLoading = ref(false);
 
 const submitForm = async () => {
 
