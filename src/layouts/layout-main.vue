@@ -22,14 +22,16 @@ const clickMenu = () => {
 <template>
   <main class="w-100 layout-main">
     <Header :open-menu="openMenu" @on-press="clickMenu" />
-    <div class="w-100 layout-main-content">
+    <div class="w-100">
       <div class="container">
-        <RouterView v-slot="{ Component, route }">
-          <keep-alive>
-            <component :is="Component" :key="route.matched[1].path" v-if="route.meta.keep_alive" />
-          </keep-alive>
-          <component :is="Component" :key="route.matched[1].path" v-if="!route.meta.keep_alive" />
-        </RouterView>
+        <div class="layout-main-content">
+          <RouterView v-slot="{ Component, route }">
+            <keep-alive>
+              <component :is="Component" :key="route.matched[1].path" v-if="route.meta.keep_alive" />
+            </keep-alive>
+            <component :is="Component" :key="route.matched[1].path" v-if="!route.meta.keep_alive" />
+          </RouterView>
+        </div>
       </div>
       <template v-if="is_mobile">
         <Footer v-if="route.name !== 'freelancerList'" />

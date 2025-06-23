@@ -1,6 +1,6 @@
 <template>
   <!-- 登入表單與 Icon -->
-  <div class="container py-5">
+  <div class="py-5">
     <div class="row">
       <!-- 左側：登入表單 -->
       <div class="col-md-8">
