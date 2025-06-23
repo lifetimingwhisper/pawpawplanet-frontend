@@ -1,5 +1,6 @@
 <script setup>
 import { ref, onMounted, useTemplateRef } from 'vue'
+import { useRouter } from 'vue-router'
 import Modal from 'bootstrap/js/dist/modal.js'
 import DatepickerSelect from '@/components/select/datepicker-select.vue'
 import { format, addDays } from 'date-fns'
@@ -27,6 +28,8 @@ const props = defineProps({
 
 
 const toast = useToast()
+
+const router = useRouter()
 
 const modalRef = useTemplateRef('modalRef');
 
@@ -104,6 +107,7 @@ const reserve = async () => {
       disabled.value = false
       toast.show('預約成功', 'success')
       modalInstance.hide()
+      await router.push('/owner-order-list')
     }
   } else {
     disabled.value = false

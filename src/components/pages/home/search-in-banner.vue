@@ -88,7 +88,7 @@ const search = () => {
               />
             </div>
             <div class="col-lg-2 d-flex align-self-end">
-              <div class="w-100 py-3">
+              <div class="w-100 py-2">
                 <ButtonComponent
                   class="btn-primary"
                   text="搜尋"
