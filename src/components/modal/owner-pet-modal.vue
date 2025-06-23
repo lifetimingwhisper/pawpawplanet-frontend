@@ -61,9 +61,9 @@ const species = [
   { id: 1, name: '狗' },
 ]
 const sizes = [
-  { id: 0, name: '小', content: '小型-10公斤以下' },
-  { id: 1, name: '中', content: '中型-10公斤以上，20公斤以下' },
-  { id: 2, name: '大', content: '2 大型- 20公斤以上' },
+  { id: 0, name: '小型-10公斤以下' },
+  { id: 1, name: '中型-10公斤以上，20公斤以下' },
+  { id: 2, name: '大型-20公斤以上' },
 ]
 
 function validateNotRequired(value) {
@@ -375,7 +375,7 @@ const remove = (file) => {
                     >
                       <option value="">請選擇寵物體型</option>
                       <option v-for="size in sizes" :key="size" :value="size.id">
-                        {{ size.name }} {{ size.content }}
+                        {{ size.name }}
                       </option>
                     </select>
                     <div v-if="formErrorCheck.size_id" class="invalid-feedback">

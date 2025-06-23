@@ -40,7 +40,7 @@ const formatIs_ligation = computed(() => {
   return mapping[petData.value.is_ligation] || null
 })
 const formatSize = computed(() => {
-  const mapping = { 0: '小', 1: '中', 2: '大' }
+  const mapping = { 0: '小型-10公斤以下', 1: '中型-10公斤以上，20公斤以下', 2: '大型-20公斤以上' }
   return mapping[petData.value.size_id] || null
 })
 
