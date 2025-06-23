@@ -128,7 +128,7 @@
     </div>
 
     <Modal title="Modal1" ref="thisModal" :pageData="pageData" :samedayOrdersData="samedayOrdersData" :patchOrderApi="patchOrderApi">
-      <template #header>您在 {{ samedayOrdersData?.[0]?.order?.service_date }} 有 {{ Object.keys(samedayOrdersData).length }} 項等待接受的預約，請從清單中選擇接受的預約</template>
+      <template #header>您在 {{ samedayOrdersData?.[0]?.order?.service_date }} 有 {{ Object.keys(samedayOrdersData).length }} 項等待接受的預約，請從清單中選擇接受的預約，其他預約會自動拒絕</template>
     </Modal>
   </main>
 </template>
