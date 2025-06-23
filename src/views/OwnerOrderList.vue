@@ -10,7 +10,7 @@
   import Loading from '@/components/loading/loading-component.vue'
 
   const loginStore = useLoginStore()
-  const loading = ref(false)
+  const loading = ref(true)
 
   const router = useRouter();
   const route = useRoute();
