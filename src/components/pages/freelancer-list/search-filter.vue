@@ -79,7 +79,7 @@ const updateLocation = (value) => {
           prepend-icon="map"
           append-icon="cancel"
           label=""
-          placeholder="選擇你的位置"
+          placeholder="選擇你的位置 ex:臺北市 信義區"
           @update:model="updateLocation"
         />
       </div>
