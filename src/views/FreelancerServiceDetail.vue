@@ -328,8 +328,11 @@ const petDetail = ref({})
 const fetchServiceDetail = async (id) => {
   try {
     loading.value = true
+    const order = [1, 2, 3, 4, 5, 6, 0]
     const { freelancer_profile, service, review_status } = await getServiceDetail(id)
     freelancer_profile.available_weekday_cn = freelancer_profile?.available_weekdays
+      .slice()//避免改到原陣列
+      .sort((a, b) => order.indexOf(a) - order.indexOf(b))
       .map((i) => weeksCn[i])
       .join('、')
     freelancer_profile.allowed_pet_sizes_cn = service?.allowed_pet_sizes

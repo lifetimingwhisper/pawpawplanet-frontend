@@ -5,6 +5,7 @@ import { storeToRefs } from 'pinia'
 import { logoutUser } from '@/plugins/api/users/users.js'
 import { useToast } from '@/plugins/toast/toast-plugin.js'
 import { useRoute, useRouter } from 'vue-router'
+import { ref } from 'vue'
 
 defineProps({
   openMenu: {
@@ -12,6 +13,8 @@ defineProps({
     required: true,
   },
 })
+
+const loginLoading = ref(false)
 
 const emit = defineEmits(['onPress'])
 
@@ -33,7 +36,9 @@ const clickLink = () => {
 
 const clickLoginBtn = async () => {
   if (is_login.value) {
+    loginLoading.value = true
     await logoutUser()
+    loginLoading.value = false
     removeLoginStatus(false)
     removeUserInfo(false)
     toast.show('登出成功', 'success')
@@ -120,6 +125,7 @@ const clickRegisterBtn = () => {
           <ButtonComponent
             class="btn-primary"
             :text="is_login ? '登出' : '登入'"
+            :loading="loginLoading"
             @on-press="clickLoginBtn"
           />
         </div>
