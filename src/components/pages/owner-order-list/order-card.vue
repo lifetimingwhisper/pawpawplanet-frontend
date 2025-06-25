@@ -72,7 +72,7 @@
             <SvgIcon v-if="!orderData.freelancer.avatar" name="user" class="rounded-circle avatar me-3"
               color="#452B14" />
             <div>
-              <div class="fw-bold mb-1 ms-1">{{ orderData.freelancer.name }}</div>
+              <div class="fw-bold text-break mb-1 ms-1">{{ orderData.freelancer.name }}</div>
               <div class="text-primary small">
                 <span class="text-black me-2">{{ orderData.freelancer.phone }} </span>
                 <SvgIcon name="map" color="#ECB88A" class="me-1" :size="24" />
@@ -80,7 +80,7 @@
               </div>
             </div>
           </div>
-          <p class="text-muted small mb-3">{{ orderData.freelancer.description }}</p>
+          <p class="text-muted small text-break mb-3">{{ orderData.freelancer.description }}</p>
           <hr class="text-muted">
           <div class="d-flex mb-3">
             <div class="text-center me-3">
@@ -88,7 +88,7 @@
               <img v-if="orderData.pet.avatar" :src="orderData.pet.avatar" class="rounded-circle avatar mb-1"
                 alt="寵物頭像" />
               <SvgIcon v-if="!orderData.pet.avatar" name="user" class="rounded-circle avatar mb-1" color="#452B14" />
-              <div class="pet-name">{{ orderData.pet.name }}</div>
+              <div class="pet-name text-break">{{ orderData.pet.name }}</div>
             </div>
             <div class="row w-100">
               <template v-for="i in 4" :key="i">
@@ -102,7 +102,7 @@
                   <p v-if="i == 1">{{ formatSize }}</p>
                   <p v-if="i == 2">{{ formatAge }} 歲</p>
                   <p v-if="i == 3">{{ formatGender }}</p>
-                  <p v-if="i == 4">{{ orderData.pet.personality_description }}</p>
+                  <p v-if="i == 4" class="text-break">{{ orderData.pet.personality_description }}</p>
                 </div>
               </template>
             </div>
@@ -128,7 +128,7 @@
                   </p>
                   <p v-if="i == 2">{{ orderData.order.service_date }}</p>
                   <p v-if="i == 3">{{ orderData.service.city }} {{ orderData.service.area }}</p>
-                  <p v-if="i == 4">{{ orderData.order.note }}</p>
+                  <p v-if="i == 4" class="text-break">{{ orderData.order.note }}</p>
                 </div>
               </template>
             </div>

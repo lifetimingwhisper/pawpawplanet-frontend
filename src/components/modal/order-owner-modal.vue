@@ -81,7 +81,7 @@
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </span>
         </div>
-        <div class="modal-body">
+        <div class="modal-body px-1 px-sm-3">
           <div class="container-fluid">
             <div class="row mb-3">
               <div v-for="orderData in visibleCards" :key="orderData.order.id" class="col-lg-6">
