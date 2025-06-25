@@ -140,7 +140,12 @@
     -webkit-overflow-scrolling: touch;
   }
   input[type="radio"].btn-check{
+    & + label{
+      border-color: $black-300;
+      color: $primary-dark-second;
+    }
     &:checked + label, &:hover + label{
+      border-color: $primary-dark-second;
       background-color: $primary-dark;
       color: #fff;
     }
