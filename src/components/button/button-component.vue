@@ -25,6 +25,10 @@ const props = defineProps({
   iconSize: {
     type: Number,
   },
+  loading: {
+    type: Boolean,
+    default: false
+  }
 })
 const emit = defineEmits(['onPress'])
 const onClick = (value) => {
@@ -32,12 +36,14 @@ const onClick = (value) => {
 }
 </script>
 <template>
-  <button
-    type="button"
-    class="btn custom-btn fw-bold"
-    :class="props.class"
-    @click="onClick"
-  >
+  <button type="button" class="btn custom-btn fw-bold" :class="props.class" @click="onClick">
+    <span
+      v-if="loading"
+      class="spinner-border spinner-border-sm d-inline-block mx-1"
+      role="status"
+      style="opacity: 0.8"
+    >
+    </span>
     <SvgIcon
       v-if="prependIcon.length > 0"
       :name="prependIcon"

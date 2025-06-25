@@ -6,13 +6,14 @@ import { useLoginStore } from '@/stores/login.js'
 import { logoutUser } from '@/plugins/api/users/users.js'
 import { useToast } from '@/plugins/toast/toast-plugin.js'
 
-
 defineProps({
   openMenu: {
     type: Boolean,
     required: true,
   },
 })
+
+const loginLoading = ref(false)
 
 const emit = defineEmits(['onPress'])
 
@@ -33,7 +34,9 @@ const clickOtherElement = (e) => {
 
 const clickLoginBtn = async () => {
   if (is_login.value) {
+    loginLoading.value = true
     await logoutUser()
+    loginLoading.value = false
     removeLoginStatus(false)
     removeUserInfo(false)
     toast.show('登出成功', 'success')
@@ -60,7 +63,7 @@ onMounted(() => {
     <div class="container">
       <div class="d-flex align-items-center justify-content-between">
         <RouterLink to="/">
-          <img class="header-logo" src="@/assets/images/logo/logo.png" alt="">
+          <img class="header-logo" src="@/assets/images/logo/logo.png" alt="" />
         </RouterLink>
         <div class="d-lg-flex align-items-center d-none">
           <div class="px-2">
@@ -74,20 +77,22 @@ onMounted(() => {
                 aria-expanded="false"
                 @click="open = !open"
               >
-                <p>
-                  服務內容
-                </p>
+                <p>服務內容</p>
                 <SvgIcon
                   name="chevron_down"
                   color="#452B14"
                   :size="28"
                   style="transition: ease-in 0.2s"
                   :style="{
-                    'transform': open ? 'rotate(-180deg)' : 'rotate(0deg)',
+                    transform: open ? 'rotate(-180deg)' : 'rotate(0deg)',
                   }"
                 />
               </button>
-              <ul class="dropdown-menu bg-secondary-tint border-primary-dark" :class="{ 'show': open }" aria-labelledby="dropdownMenuButton1">
+              <ul
+                class="dropdown-menu bg-secondary-tint border-primary-dark"
+                :class="{ show: open }"
+                aria-labelledby="dropdownMenuButton1"
+              >
                 <li>
                   <RouterLink to="/service" class="dropdown-item">
                     <span class="d-inline-block">寵物寄宿</span>
@@ -140,26 +145,35 @@ onMounted(() => {
               >
                 <div class="header-avatar">
                   <!--                  無上傳會員大頭貼預設 svg-->
-                  <SvgIcon v-if="!user?.avatar?.length" name="user" color="#452B14" size="20"/>
+                  <SvgIcon v-if="!user?.avatar?.length" name="user" color="#452B14" size="20" />
                   <!--                  上傳會員大頭貼顯示圖片-->
-                  <img v-else :src="user.avatar[0]" alt="">
+                  <img v-else :src="user.avatar[0]" alt="" />
                 </div>
                 <div class="px-2">
-<!--                  無填寫會員名稱預設 會員-->
+                  <!--                  無填寫會員名稱預設 會員-->
                   <h4 class="header-name">{{ !user.name ? '會員' : user.name }}</h4>
                 </div>
               </RouterLink>
             </div>
             <div class="px-2">
-              <ButtonComponent class="btn-primary" :text="is_login ? '登出' : '登入'" @on-press="clickLoginBtn" />
+              <ButtonComponent
+                class="btn-primary"
+                :text="is_login ? '登出' : '登入'"
+                :loading="loginLoading"
+                @on-press="clickLoginBtn"
+              />
             </div>
             <div v-if="!is_login" class="px-2">
-              <ButtonComponent class="btn-outline-dark-second" text="註冊" @on-press="clickRegisterBtn" />
+              <ButtonComponent
+                class="btn-outline-dark-second"
+                text="註冊"
+                @on-press="clickRegisterBtn"
+              />
             </div>
           </div>
         </div>
         <button type="button" class="btn d-lg-none" @click="clickMenu">
-          <div :class="{ 'open': openMenu }" id="nav-icon4">
+          <div :class="{ open: openMenu }" id="nav-icon4">
             <span></span>
             <span></span>
             <span></span>
