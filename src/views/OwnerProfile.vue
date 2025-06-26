@@ -43,6 +43,14 @@ const formatSize = computed(() => {
   const mapping = { 0: '小型-10公斤以下', 1: '中型-10公斤以上，20公斤以下', 2: '大型-20公斤以上' }
   return mapping[petData.value.size_id] || null
 })
+let petCardContents = [
+  {name: '名字', key: 'name'},
+  {name: '種類', key: 'species_id'},
+  {name: '性別', key: 'gender'},
+  {name: '出生年月日', key: 'birthday'},
+  {name: '是否結紮', key: 'is_ligation'},
+  {name: '體型', key: 'size_id'}
+]
 
 const editProfile = () => {
   // alert('進入編輯模式')
@@ -222,23 +230,15 @@ const getImageUrls = (fileList = []) => {
                 </button>
               </div>
 
-              <div class="row">
-                <div class="col-5 col-md-4 text-end d-flex flex-column gap-1">
-                  <p>名字<span>｜</span></p>
-                  <p>種類<span>｜</span></p>
-                  <p>性別<span>｜</span></p>
-                  <p>出生年月日<span>｜</span></p>
-                  <p>是否結紮<span>｜</span></p>
-                  <p>體型<span>｜</span></p>
-                </div>
-                <div class="col-7 col-md-8 d-flex flex-column gap-1 ps-0">
-                  <p>{{ petCardData.name }}</p>
-                  <p>{{ petCardData.species_id }}</p>
-                  <p>{{ petCardData.gender }}</p>
-                  <p>{{ petCardData.birthday }}</p>
-                  <p>{{ petCardData.is_ligation }}</p>
-                  <p>{{ petCardData.size_id }}</p>
-                </div>
+              <div class="row gy-1">
+                <template v-for="content in petCardContents" :key="content">
+                  <div class="col-5 col-md-4 text-end">
+                    <p>{{ content.name }}<span>｜</span></p>
+                  </div>
+                  <div class="col-7 col-md-8 ps-0">
+                    <p :class="{'text-break': content.key == 'name'}">{{ petCardData[content.key] }}</p>
+                  </div>
+                </template>
               </div>
             </div>
           </div>
