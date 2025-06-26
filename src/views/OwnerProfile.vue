@@ -44,7 +44,6 @@ const formatSize = computed(() => {
   return mapping[petData.value.size_id] || null
 })
 let petCardContents = [
-  {name: '名字', key: 'name'},
   {name: '種類', key: 'species_id'},
   {name: '性別', key: 'gender'},
   {name: '出生年月日', key: 'birthday'},
@@ -215,28 +214,29 @@ const getImageUrls = (fileList = []) => {
 
       <div class="mt-5" v-if="hasPet">
         <div class="card mx-auto p-4" style="max-width: 700px; border-radius: 20px">
-          <div class="d-flex flex-column flex-md-row">
-            <img
-              v-if="petCardData.avatar"
-              :src="petCardData.avatar"
-              alt="毛小孩照片"
-              class="rounded img-fluid me-md-4 mb-3 mb-md-0"
-              style="max-width: 250px; height: auto"
-            />
-            <div class="flex-fill">
-              <div class="text-end">
-                <button class="btn btn-outline-secondary btn-sm" @click="addPetProfile">
-                  <i class="bi bi-pencil-square"></i>
-                </button>
-              </div>
-
-              <div class="row gy-1">
+          <div class="d-flex flex-column flex-md-row align-items-center align-items-md-start">
+            <div class="order-0 order-md-2 mb-3 ms-auto">
+              <button class="btn btn-outline-secondary btn-sm" @click="addPetProfile">
+                <i class="bi bi-pencil"></i>
+              </button>
+            </div>
+            <div class="text-center avatar-width me-0 me-md-3 mb-3 mb-md-0">
+              <img
+                v-if="petCardData.avatar"
+                :src="petCardData.avatar"
+                alt="毛小孩照片"
+                class="rounded-circle avatar"
+              />
+              <p class="text-break">{{ petCardData.name }}</p>
+            </div>
+            <div>
+              <div class="row gy-2">
                 <template v-for="content in petCardContents" :key="content">
-                  <div class="col-5 col-md-4 text-end">
+                  <div class="col-6 col-md-4 text-end">
                     <p>{{ content.name }}<span>｜</span></p>
                   </div>
-                  <div class="col-7 col-md-8 ps-0">
-                    <p :class="{'text-break': content.key == 'name'}">{{ petCardData[content.key] }}</p>
+                  <div class="col-6 col-md-8 ps-0">
+                    <p>{{ petCardData[content.key] }}</p>
                   </div>
                 </template>
               </div>
@@ -280,5 +280,16 @@ const getImageUrls = (fileList = []) => {
 .value {
   text-align: left;
   word-break: break-word;
+}
+
+.avatar {
+    width: 160px;
+    height: 160px;
+    object-fit: cover;
+    background-color: rgb(249, 234, 220);
+  }
+.avatar-width {
+  width: 160px;
+  /* $primary-dark-second */
 }
 </style>
