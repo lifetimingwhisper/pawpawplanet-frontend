@@ -168,7 +168,7 @@ const getImageUrls = (fileList = []) => {
   <main>
     <div class="container py-5">
       <h2 class="text-center mb-4">飼主及毛小孩個人中心</h2>
-      <div class="card mx-auto p-4" style="max-width: 700px; border-radius: 20px">
+      <div class="card border-dark-second mx-auto p-4">
         <div class="d-flex flex-column flex-md-row align-items-center align-items-md-start">
           <div class="order-0 order-md-2 mb-3 ms-auto">
             <button class="btn btn-outline-secondary btn-sm" @click="editProfile">
@@ -196,13 +196,20 @@ const getImageUrls = (fileList = []) => {
         </div>
       </div>
 
+      <div class="position-relative">
+        <hr class="border-dark-second mt-5 my-3">
+        <div class="position-absolute top-0 start-50 translate-middle">
+          <div class="text-brown fw-bold hr-content p-2" style="background: #FFECC8; color: #452B14;">您的毛小孩</div>
+        </div>
+      </div>
+
       <div class="text-center mt-4" v-if="!hasPet">
-        <button class="btn btn-success rounded-pill px-4 py-2" @click="addPetProfile">
+        <button class="btn btn-primary rounded-pill px-4 py-2" @click="addPetProfile">
           <i class="bi bi-plus-circle me-2"></i>新增毛小孩資訊
         </button>
       </div>
 
-      <div v-if="hasPet" class="card mx-auto p-4 mt-5" style="max-width: 700px; border-radius: 20px">
+      <div v-if="hasPet" class="card border-dark-second mx-auto p-4 mt-5">
         <div class="d-flex flex-column flex-md-row align-items-center align-items-md-start">
           <div class="order-0 order-md-2 mb-3 ms-auto">
             <button class="btn btn-outline-secondary btn-sm" @click="addPetProfile">
@@ -247,21 +254,25 @@ const getImageUrls = (fileList = []) => {
   </main>
 </template>
 <style scoped>
-.card {
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-}
-.grid-columns {
-  display: grid;
-  grid-template-columns: 0fr 1fr;
-}
-.avatar {
-    width: 160px;
-    height: 160px;
-    object-fit: cover;
-    background-color: rgb(249, 234, 220);
+  .card {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    max-width: 700px;
+    border-radius: 20px;
   }
-.avatar-width {
-  width: 160px;
-  /* $primary-dark-second */
-}
+  .grid-columns {
+    display: grid;
+    grid-template-columns: 0fr 1fr;
+  }
+  .avatar {
+      width: 160px;
+      height: 160px;
+      object-fit: cover;
+      background-color: rgb(249, 234, 220);
+    }
+  .avatar-width {
+    width: 160px;
+  }
+  .border-dark-second{
+    border-color: #452B14;
+  }
 </style>
