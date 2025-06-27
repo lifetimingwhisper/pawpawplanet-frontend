@@ -44,6 +44,22 @@ const formatSize = computed(() => {
   return mapping[petData.value.size_id] || null
 })
 
+let petCardContents = [
+  {name: '種類', key: 'species_id'},
+  {name: '性別', key: 'gender'},
+  {name: '出生年月日', key: 'birthday'},
+  {name: '是否結紮', key: 'is_ligation'},
+  {name: '體型', key: 'size_id'}
+]
+
+let ownerCardContents = [
+  {name: '所在縣市', key: 'city'},
+  {name: '所在地區', key: 'area'},
+  {name: '電話', key: 'phone'},
+  {name: 'Email', key: 'email'},
+  {name: '自我介紹', key: 'description'}
+]
+
 const editProfile = () => {
   // alert('進入編輯模式')
   showModal()
@@ -152,99 +168,76 @@ const getImageUrls = (fileList = []) => {
   <main>
     <div class="container py-5">
       <h2 class="text-center mb-4">飼主及毛小孩個人中心</h2>
-      <div class="card mx-auto p-4" style="max-width: 700px; border-radius: 20px">
-        <div class="d-flex flex-column flex-md-row">
-          <img
-            v-if="owner?.avatar?.length"
-            :src="owner.avatar"
-            alt="飼主照片"
-            class="rounded img-fluid me-md-4 mb-3 mb-md-0"
-            style="max-width: 250px; height: auto"
-          />
-          <div class="flex-fill">
-            <div class="text-end">
-              <button class="btn btn-outline-secondary btn-sm" @click="editProfile">
-                <i class="bi bi-pencil-square"></i>
-              </button>
+      <div class="card border-dark-second mx-auto p-4">
+        <div class="d-flex flex-column flex-md-row align-items-center align-items-md-start">
+          <div class="order-0 order-md-2 mb-3 ms-auto">
+            <button class="btn btn-outline-secondary btn-sm" @click="editProfile">
+              <i class="bi bi-pencil"></i>
+            </button>
+          </div>
+          <div class="text-center avatar-width me-0 me-md-3 mb-3 mb-md-0">
+            <img
+              v-if="owner?.avatar?.length"
+              :src="owner.avatar"
+              alt="飼主照片"
+              class="rounded-circle avatar"
+            />
+            <SvgIcon v-if="!owner?.avatar?.length" name="user" class="rounded-circle avatar" color="#452B14"/>
+            <p class="text-break">{{ owner.name }}</p>
+          </div>
+          <div class="w-100">
+            <div class="grid-columns gap-2">
+              <template v-for="item in ownerCardContents" :key="item">
+                <p class="text-nowrap text-end">{{ item.name }}｜</p>
+                <p class="text-break">{{ owner[item.key] }}</p>
+              </template>
             </div>
-
-            <div class="owner-info-grid">
-              <div class="label">飼主名稱｜</div>
-              <div class="value">{{ owner.name }}</div>
-
-              <div class="label">所在縣市｜</div>
-              <div class="value">{{ owner.city }}</div>
-
-              <div class="label">所在地區｜</div>
-              <div class="value">{{ owner.area }}</div>
-
-              <div class="label">電話｜</div>
-              <div class="value">{{ owner.phone }}</div>
-
-              <div class="label">Email｜</div>
-              <div class="value">{{ !loading && owner.email ? owner.email : '' }}</div>
-
-              <div class="label">自我介紹｜</div>
-              <div class="value">{{ owner.description }}</div>
-            </div>
-            <!-- <p>飼主名稱:{{ owner.name }}</p>
-            <p><strong>所在縣市:</strong>{{ owner.city }}</p>
-            <p><strong>所在地區:</strong>{{ owner.area }}</p>
-            <p><strong>電話:</strong>{{ owner.phone }}</p>
-            <div v-if="!loading && owner.email">
-              <p><strong>Email:</strong>{{ owner.email }}</p>
-            </div>
-            <p><strong>自我介紹:</strong>{{ owner.description }}</p> -->
           </div>
         </div>
       </div>
 
+      <div class="position-relative">
+        <hr class="border-dark-second mt-5 my-3">
+        <div class="position-absolute top-0 start-50 translate-middle">
+          <div class="text-brown fw-bold hr-content p-2" style="background: #FFECC8; color: #452B14;">您的毛小孩</div>
+        </div>
+      </div>
+
       <div class="text-center mt-4" v-if="!hasPet">
-        <button class="btn btn-success rounded-pill px-4 py-2" @click="addPetProfile">
+        <button class="btn btn-primary rounded-pill px-4 py-2" @click="addPetProfile">
           <i class="bi bi-plus-circle me-2"></i>新增毛小孩資訊
         </button>
       </div>
 
-      <div class="mt-5" v-if="hasPet">
-        <div class="card mx-auto p-4" style="max-width: 700px; border-radius: 20px">
-          <div class="d-flex flex-column flex-md-row">
+      <div v-if="hasPet" class="card border-dark-second mx-auto p-4 mt-5">
+        <div class="d-flex flex-column flex-md-row align-items-center align-items-md-start">
+          <div class="order-0 order-md-2 mb-3 ms-auto">
+            <button class="btn btn-outline-secondary btn-sm" @click="addPetProfile">
+              <i class="bi bi-pencil"></i>
+            </button>
+          </div>
+          <div class="text-center avatar-width me-0 me-md-3 mb-3 mb-md-0">
             <img
               v-if="petCardData.avatar"
               :src="petCardData.avatar"
               alt="毛小孩照片"
-              class="rounded img-fluid me-md-4 mb-3 mb-md-0"
-              style="max-width: 250px; height: auto"
+              class="rounded-circle avatar"
             />
-            <div class="flex-fill">
-              <div class="text-end">
-                <button class="btn btn-outline-secondary btn-sm" @click="addPetProfile">
-                  <i class="bi bi-pencil-square"></i>
-                </button>
-              </div>
-
-              <div class="row">
-                <div class="col-5 col-md-4 text-end d-flex flex-column gap-1">
-                  <p>名字<span>｜</span></p>
-                  <p>種類<span>｜</span></p>
-                  <p>性別<span>｜</span></p>
-                  <p>出生年月日<span>｜</span></p>
-                  <p>是否結紮<span>｜</span></p>
-                  <p>體型<span>｜</span></p>
-                </div>
-                <div class="col-7 col-md-8 d-flex flex-column gap-1 ps-0">
-                  <p>{{ petCardData.name }}</p>
-                  <p>{{ petCardData.species_id }}</p>
-                  <p>{{ petCardData.gender }}</p>
-                  <p>{{ petCardData.birthday }}</p>
-                  <p>{{ petCardData.is_ligation }}</p>
-                  <p>{{ petCardData.size_id }}</p>
-                </div>
-              </div>
+            <SvgIcon v-if="!petCardData.avatar" name="user" class="rounded-circle avatar" color="#452B14"/>
+            <p class="text-break">{{ petCardData.name }}</p>
+          </div>
+          <div class="w-100">
+            <div class="grid-columns gap-2">
+              <template v-for="item in petCardContents" :key="item">
+                <p class="text-nowrap text-end">{{ item.name }}｜</p>
+                <p class="text-break">{{ petCardData[item.key] }}</p>
+              </template>
             </div>
           </div>
         </div>
       </div>
     </div>
+
 
     <Modal title="modal1" ref="thisModal" :ownerData="owner" @submit-owner="submitOwner">
       <template #body>編輯 個人資訊</template>
@@ -261,24 +254,25 @@ const getImageUrls = (fileList = []) => {
   </main>
 </template>
 <style scoped>
-.card {
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-}
-.owner-info-grid {
-  display: grid;
-  grid-template-columns: 1fr 2fr;
-  row-gap: 8px;
-  column-gap: 12px;
-  align-items: start;
-}
-
-.label {
-  text-align: right;
-  white-space: nowrap;
-}
-
-.value {
-  text-align: left;
-  word-break: break-word;
-}
+  .card {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    max-width: 700px;
+    border-radius: 20px;
+  }
+  .grid-columns {
+    display: grid;
+    grid-template-columns: 0fr 1fr;
+  }
+  .avatar {
+      width: 160px;
+      height: 160px;
+      object-fit: cover;
+      background-color: rgb(249, 234, 220);
+    }
+  .avatar-width {
+    width: 160px;
+  }
+  .border-dark-second{
+    border-color: #452B14;
+  }
 </style>
