@@ -202,34 +202,29 @@ const getImageUrls = (fileList = []) => {
         </button>
       </div>
 
-      <div class="mt-5" v-if="hasPet">
-        <div class="card mx-auto p-4" style="max-width: 700px; border-radius: 20px">
-          <div class="d-flex flex-column flex-md-row align-items-center align-items-md-start">
-            <div class="order-0 order-md-2 mb-3 ms-auto">
-              <button class="btn btn-outline-secondary btn-sm" @click="addPetProfile">
-                <i class="bi bi-pencil"></i>
-              </button>
-            </div>
-            <div class="text-center avatar-width me-0 me-md-3 mb-3 mb-md-0">
-              <img
-                v-if="petCardData.avatar"
-                :src="petCardData.avatar"
-                alt="毛小孩照片"
-                class="rounded-circle avatar"
-              />
-              <p class="text-break">{{ petCardData.name }}</p>
-            </div>
-            <div>
-              <div class="row gy-2">
-                <template v-for="content in petCardContents" :key="content">
-                  <div class="col-6 col-md-4 text-end">
-                    <p>{{ content.name }}<span>｜</span></p>
-                  </div>
-                  <div class="col-6 col-md-8 ps-0">
-                    <p>{{ petCardData[content.key] }}</p>
-                  </div>
-                </template>
-              </div>
+      <div v-if="hasPet" class="card mx-auto p-4 mt-5" style="max-width: 700px; border-radius: 20px">
+        <div class="d-flex flex-column flex-md-row align-items-center align-items-md-start">
+          <div class="order-0 order-md-2 mb-3 ms-auto">
+            <button class="btn btn-outline-secondary btn-sm" @click="addPetProfile">
+              <i class="bi bi-pencil"></i>
+            </button>
+          </div>
+          <div class="text-center avatar-width me-0 me-md-3 mb-3 mb-md-0">
+            <img
+              v-if="petCardData.avatar"
+              :src="petCardData.avatar"
+              alt="毛小孩照片"
+              class="rounded-circle avatar"
+            />
+            <SvgIcon v-if="!petCardData.avatar" name="user" class="rounded-circle avatar" color="#452B14"/>
+            <p class="text-break">{{ petCardData.name }}</p>
+          </div>
+          <div class="w-100">
+            <div class="grid-columns gap-2">
+              <template v-for="item in petCardContents" :key="item">
+                <p class="text-nowrap text-end">{{ item.name }}｜</p>
+                <p class="text-break">{{ petCardData[item.key] }}</p>
+              </template>
             </div>
           </div>
         </div>
