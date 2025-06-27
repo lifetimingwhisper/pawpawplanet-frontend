@@ -90,7 +90,7 @@ const clickRegisterBtn = () => {
         <li v-if="is_login">
           <RouterLink
             v-if="user && user.role"
-            :to="user.role === 'owner' ? '/owner-order-management' : 'freelancer-order-list'"
+            :to="user.role === 'owner' ? '/owner-order-list' : 'freelancer-order-list'"
             @click="clickLink"
           >
             <span class="d-inline-block">管理訂單</span>
