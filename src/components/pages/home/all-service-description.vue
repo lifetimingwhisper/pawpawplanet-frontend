@@ -48,11 +48,11 @@ const { is_mobile } = storeToRefs(deviceStore)
                     <div class="col-lg-5">
                       <div class="d-flex">
                         <SvgIcon class="me-2" name="pet_boarding" :size="is_mobile? 24 : 36" color="#452B14" />
-                        <p class="home-service-subTitle">寵物寄宿/日托</p>
+                        <p class="home-service-subTitle">寵物日托</p>
                       </div>
                     </div>
                     <div class="col-lg-7">
-                      <p class="home-service-text">溫馨寄宿 - 舒適寬敞的環境，讓毛孩自在放鬆</p>
+                      <p class="home-service-text">溫馨日托 - 舒適寬敞的環境，讓毛孩自在放鬆</p>
                     </div>
                   </div>
                 </div>

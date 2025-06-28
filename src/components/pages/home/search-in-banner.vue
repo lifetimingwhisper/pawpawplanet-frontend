@@ -11,8 +11,8 @@ const serviceModel = ref(null)
 
 const serviceTypes = ref([
   {
-    value: '寵物寄宿',
-    name: '寵物寄宿',
+    value: '寵物日托',
+    name: '寵物日托',
     icon: 'pet_boarding',
   },
   {

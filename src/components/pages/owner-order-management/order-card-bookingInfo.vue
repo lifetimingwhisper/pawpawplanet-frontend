@@ -2,7 +2,7 @@
 import { defineProps, onMounted, computed } from 'vue';
 
 const SERVICE_TYPE_MAP = {
-  0: {'type' : '寵物寄宿/日托', 'icon' : 'pet_boarding'},
+  0: {'type' : '寵物日托', 'icon' : 'pet_boarding'},
   1: {'type' : '寵物散步', 'icon' : 'pet_walking'},
   2: {'type' : '寵物美容', 'icon' : 'pet_grooming'},
   3: {'type' : '到府照顧', 'icon' : 'home_care'},

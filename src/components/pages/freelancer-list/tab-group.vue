@@ -10,7 +10,7 @@ const emit = defineEmits(['press'])
 const tabGroup = ref([
   {
     id: 0,
-    value: '寵物寄宿/日托'
+    value: '寵物日托'
   },
   {
     id: 1,

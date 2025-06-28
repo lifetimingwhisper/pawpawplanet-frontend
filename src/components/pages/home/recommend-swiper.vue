@@ -22,7 +22,7 @@ defineProps({
   },
 })
 
-const serviceTypeId = ['寵物寄宿', '寵物散步', '寵物美容', '到府服務']
+const serviceTypeId = ['寵物日托', '寵物散步', '寵物美容', '到府服務']
 
 const picRef = useTemplateRef('recommend-pic-1')
 

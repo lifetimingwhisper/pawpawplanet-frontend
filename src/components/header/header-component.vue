@@ -95,7 +95,7 @@ onMounted(() => {
               >
                 <li>
                   <RouterLink to="/service" class="dropdown-item">
-                    <span class="d-inline-block">寵物寄宿</span>
+                    <span class="d-inline-block">寵物日托</span>
                   </RouterLink>
                 </li>
                 <li>
