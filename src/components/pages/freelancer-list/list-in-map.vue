@@ -134,7 +134,7 @@ const getServiceList = async () => {
 
 const checkoutCategory = async (value) => {
   switch (value) {
-    case '寵物寄宿/日托':
+    case '寵物日托':
       request.service_type_id = 0
       await router.push('/service')
       break;

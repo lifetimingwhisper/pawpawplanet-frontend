@@ -10,7 +10,7 @@
         <div class="footer-lists w-100 d-flex justify-content-center flex-wrap">
           <ul class="w-100 d-flex flex-column flex-lg-row justify-content-between ps-0">
             <li class="footer-li px-3 py-3 py-lg-4 text-center">
-              <RouterLink to="service">寵物寄宿</RouterLink>
+              <RouterLink to="service">寵物日托</RouterLink>
             </li>
             <li class="footer-li px-3 py-3 py-lg-4 text-center">
               <RouterLink to="service?type=寵物散步">寵物散步</RouterLink>

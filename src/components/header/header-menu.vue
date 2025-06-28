@@ -64,7 +64,7 @@ const clickRegisterBtn = () => {
       <ul class="header-menu-list d-flex align-items-center flex-column">
         <li>
           <RouterLink to="/service" @click="clickLink">
-            <span class="d-inline-block">寵物寄宿</span>
+            <span class="d-inline-block">寵物日托</span>
           </RouterLink>
         </li>
         <li>

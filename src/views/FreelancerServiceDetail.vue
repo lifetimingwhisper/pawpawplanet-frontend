@@ -250,8 +250,11 @@
           <div class="booking-title text-primary-dark-second text-center fw-bold">服務</div>
           <div class="price-info d-flex justify-content-between">
             <div class="service-type text-black-900">
-              <SvgIcon name="home_care" color="'#FFFFFF'" />
-              {{ serviceType[serviceInfo.service_type_id] }}
+              <SvgIcon
+                :name="serviceMap?.[serviceInfo.service_type_id]?.icon || 'home_care'"
+                color="'#FFFFFF'"
+              />
+              {{ serviceMap?.[serviceInfo.service_type_id]?.label || '' }}
             </div>
             <div class="price text-primary-dark-second fw-bold">
               NT ${{ serviceInfo.price }}/{{ serviceInfo.price_unit }}
@@ -291,7 +294,18 @@ const weeksCn = ['日', '一', '二', '三', '四', '五', '六']
 const bodySizesCn = ['小於10公斤以下', '10公斤以上~20公斤以下', '大於20公斤以上']
 const genderCn = ['男生', '女生']
 const petCn = ['犬', '貓']
-const serviceType = ['寵物日托', '寵物散步', '寵物美容', '到府照顧']
+const serviceMap = {
+  0: {
+    label: '寵物日托',
+    icon: 'pet_boarding',
+  },
+  1: { label: '寵物散步', icon: 'pet_walking' },
+  2: { label: '寵物美容', icon: 'pet_grooming' },
+  3: {
+    label: '到府服務',
+    icon: 'home_care',
+  },
+}
 
 const toast = useToast()
 const loginStore = useLoginStore()
@@ -331,7 +345,7 @@ const fetchServiceDetail = async (id) => {
     const order = [1, 2, 3, 4, 5, 6, 0]
     const { freelancer_profile, service, review_status } = await getServiceDetail(id)
     freelancer_profile.available_weekday_cn = freelancer_profile?.available_weekdays
-      .slice()//避免改到原陣列
+      .slice() //避免改到原陣列
       .sort((a, b) => order.indexOf(a) - order.indexOf(b))
       .map((i) => weeksCn[i])
       .join('、')

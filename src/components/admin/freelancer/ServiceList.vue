@@ -9,14 +9,22 @@
         class="service-box d-flex justify-content-between align-items-center p-2 mb-2"
       >
         <div class="text-primary-dark-second">
-          <i :class="item.icon"></i> {{ item.name }}
+          <div class="d-flex align-items-center">
+            <SvgIcon class="me-1" :name="item.icon" color="#452B14" :size="20" />
+            {{ item.name }}
+          </div>
           <div v-if="item.serviceData?.enabled && item.created" class="ms-4 text-black">
             <small> 價格：{{ item.serviceData.price_unit }}費用 </small>
             <br />
             <small> {{ item.serviceData.price }} TWD </small>
           </div>
         </div>
-        <button class="text-primary-dark-second btn btn-primary btn-lg rounded-pill" @click="goEdit(item.type)">{{ item.serviceData?.enabled ?  '提供' : '啟用'}}服務</button>
+        <button
+          class="text-primary-dark-second btn btn-primary btn-lg rounded-pill"
+          @click="goEdit(item.type)"
+        >
+          {{ item.serviceData?.enabled ? '提供' : '啟用' }}服務
+        </button>
       </div>
     </div>
     <div>
@@ -27,14 +35,22 @@
         class="service-box d-flex justify-content-between align-items-center p-2 mb-2"
       >
         <div class="text-primary-dark-second">
-          <i :class="item.icon"></i> {{ item.name }}
+          <div class="d-flex align-items-center">
+            <SvgIcon class="me-1" :name="item.icon" color="#452B14" :size="20" />
+            {{ item.name }}
+          </div>
           <div v-if="item.serviceData?.enabled && item.created" class="ms-4 text-black">
             <small> 價格：{{ item.serviceData.price_unit }}費用 </small>
             <br />
             <small> {{ item.serviceData.price }} TWD </small>
           </div>
         </div>
-        <button class="text-primary-dark-second btn btn-primary btn-lg rounded-pill" @click="goEdit(item.type)">{{ item.serviceData?.enabled ?  '提供' : '啟用'}}服務</button>
+        <button
+          class="text-primary-dark-second btn btn-primary btn-lg rounded-pill"
+          @click="goEdit(item.type)"
+        >
+          {{ item.serviceData?.enabled ? '提供' : '啟用' }}服務
+        </button>
       </div>
     </div>
   </div>
@@ -58,13 +74,13 @@ const router = useRouter()
 const toast = useToast()
 
 const homeServices = [
-  { name: '日托', type: 0, icon: 'bi bi-sun' },
-  { name: '美容', type: 2, icon: 'bi bi-scissors' },
+  { name: '寵物日托', type: 0, icon: 'pet_boarding' },
+  { name: '寵物美容', type: 2, icon: 'pet_grooming' },
 ]
 
 const customerServices = [
-  { name: '散步', type: 1, icon: 'bi bi-person-walking' },
-  { name: '到府照顧', type: 3, icon: 'bi bi-house-door' },
+  { name: '寵物散步', type: 1, icon: 'pet_walking' },
+  { name: '到府服務', type: 3, icon: 'home_care' },
 ]
 
 const homeServiceList = computed(() => attachServiceData(homeServices))

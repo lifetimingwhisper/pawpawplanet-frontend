@@ -17,11 +17,11 @@ export default function formatter(data) {
 
   //服務類型轉換
   const serviceTypes = [
-    { name: '寵物寄宿/日托', icon: 'pet_boarding' },
+    { name: '寵物日托', icon: 'pet_boarding' },
     { name: '寵物散步', icon: 'pet_walking' },
     { name: '寵物美容', icon: 'pet_grooming' },
-    { name: '到府服務', icon: 'home_care' }
-  ];
+    { name: '到府服務', icon: 'home_care' },
+  ]
   const formatServerTypeData = (key) => computed(() => serviceTypes[data[key]] || null);
 
   const statusTypes = [

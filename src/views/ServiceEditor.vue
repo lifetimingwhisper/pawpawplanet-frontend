@@ -2,8 +2,10 @@
   <div class="py-4">
     <Loading :show="loading" />
     <h4 class="mb-3 text-primary-dark-second">
-      <i :class="service.icon" class="me-2"></i>
-      {{ service.label }}
+      <div class="d-flex align-items-center">
+        <SvgIcon class="me-2" :name="service.icon" color="#452B14" :size="25" />
+        {{ service.label }}
+      </div>
       <div class="form-check form-switch float-end mb-3 d-flex align-items-center">
         <input class="form-check-input" role="button" type="checkbox" v-model="form.enabled" />
         <label class="ms-2 form-check-label">啟用服務</label>
@@ -245,18 +247,18 @@ const bodySizes = ['小於10公斤以下', '10公斤以上~20公斤以下', '大
 
 const serviceMap = {
   0: {
-    label: '日托',
-    icon: 'bi bi-sun',
+    label: '寵物日托',
+    icon: 'pet_boarding',
     pee_poo_times_per_day: true,
     walk_times_per_day: true,
     house_type: true,
     outdoor_area_size: true,
   },
-  1: { label: '散步', icon: 'bi bi-person-walking' },
-  2: { label: '美容', icon: 'bi bi-scissors' },
+  1: { label: '寵物散步', icon: 'pet_walking' },
+  2: { label: '寵物美容', icon: 'pet_grooming' },
   3: {
-    label: '到府照顧',
-    icon: 'bi bi-house-door',
+    label: '到府服務',
+    icon: 'home_care',
     pee_poo_times_per_day: true,
     walk_times_per_day: true,
   },
