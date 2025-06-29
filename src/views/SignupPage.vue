@@ -1,7 +1,6 @@
 <template>
   <!-- 註冊表單 + Icon -->
   <div class="container py-5 position-relative">
-     <Loading :show="isLoading" size="60px" />
     <div class="row">
       <!-- 左側：註冊表單 -->
       <div class="col-md-8">
@@ -70,7 +69,10 @@
               <label class="form-check-label" for="roleContractor">接案者</label>
             </div>
           </div>
-          <button type="submit" class="btn btn-primary" :disabled="isLoading">註冊</button>
+          <button type="submit" class="btn btn-primary d-flex align-items-center" :disabled="isLoading">
+            <Loading :show="isLoading" size="14px" />
+            註冊
+          </button>
         </form>
         <p v-if="errorMessage" class="text-danger mt-3">{{ errorMessage }}</p>
       </div>
@@ -98,11 +100,11 @@ const role = ref('owner')
 const errorMessage = ref('')
 
 const router = useRouter()
-const isLoading = ref(false); 
+const isLoading = ref(false);
 
 const submitForm = async () => {
   errorMessage.value = ''
-  
+
 
   if (password.value !== confirmPassword.value) {
     errorMessage.value = '密碼和確認密碼不一致'
@@ -122,9 +124,10 @@ const submitForm = async () => {
 
   try {
     const data = await registerUser(formData)
-    console.log('註冊成功:', data)
-    toast.show('註冊成功！', 'success')
-    await router.push('/login')
+    if (data) {
+      toast.show('註冊成功！', 'success')
+      await router.push('/login')
+    }
   } catch (error) {
     console.error('註冊失敗:', error.response?.data || error.message)
     if (error.response && error.response.data && error.response.data.message) {

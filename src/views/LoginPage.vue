@@ -1,7 +1,6 @@
 <template>
   <!-- 登入表單與 Icon -->
   <div class="py-5 position-relative">
-    <Loading :show="isLoading" size="60px" />
     <div class="row">
       <!-- 左側：登入表單 -->
       <div class="col-md-8">
@@ -16,7 +15,10 @@
             <input type="password" class="form-control" placeholder="請輸入您的密碼" id="password" v-model="password" required>
           </div>
           <div class="d-flex align-items-center mt-3">
-            <button type="submit" class="btn btn-primary me-3" :disabled="isLoading">登入</button>
+            <button type="submit" class="btn btn-primary me-3 d-flex align-items-center" :disabled="isLoading">
+              <Loading :show="isLoading" size="14px" />
+              登入
+            </button>
             <p v-if="errorMessage" class="text-danger mb-0">{{ errorMessage }}</p>
           </div>
         </form>

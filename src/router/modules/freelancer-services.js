@@ -6,6 +6,7 @@ const freelancerServicesRouter = {
   component: ServiceEditor,
   meta: {
     verification_required: true,
+    accept_role: 'freelancer',
   },
 }
 

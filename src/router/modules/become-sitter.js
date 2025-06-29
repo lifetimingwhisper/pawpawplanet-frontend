@@ -6,6 +6,7 @@ const becomeSitterRouter = {
   component: BecomeSitterPage,
   meta: {
     verification_required: false,
+    accept_role: 'owner',
   },
 }
 

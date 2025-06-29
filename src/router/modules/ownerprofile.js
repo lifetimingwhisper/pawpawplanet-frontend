@@ -6,6 +6,7 @@ const ownerprofileRouter = {
   component: OwnerProfile,
   meta: {
     verification_required: true,
+    accept_role: 'owner',
   },
 }
 

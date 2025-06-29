@@ -60,11 +60,28 @@ router.beforeEach((to, from, next) => {
     saveUserInfo(JSON.parse(user_info))
     // 已登入判斷 meta verification_required
     if (to.meta.verification_required) {
-      next()
+      if (to.meta.accept_role === 'owner') {
+        if (to.meta.accept_role === JSON.parse(user_info).role) {
+          next()
+        } else {
+          next('/')
+        }
+      } else if (to.meta.accept_role === 'freelancer') {
+        if (to.meta.accept_role === JSON.parse(user_info).role) {
+          next()
+        } else {
+          next('/')
+        }
+      }
     } else if (!to.meta.verification_required) {
       if (to.path === '/login' || to.path === '/signup') {
-        console.log('已登入')
         next('/')
+      } else if (to.path === '/become-a-sitter') {
+        if (JSON.parse(user_info).role === 'freelancer') {
+          next('/')
+        } else {
+          next()
+        }
       } else {
         next()
       }

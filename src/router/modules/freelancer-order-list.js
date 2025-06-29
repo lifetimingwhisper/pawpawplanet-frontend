@@ -6,6 +6,7 @@ const freelancerOrderListRouter = {
   component: freelancerOrderList,
   meta: {
     verification_required: true,
+    accept_role: 'freelancer',
   },
 }
 

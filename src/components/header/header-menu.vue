@@ -82,7 +82,7 @@ const clickRegisterBtn = () => {
             <span class="d-inline-block">到府服務</span>
           </RouterLink>
         </li>
-        <li>
+        <li v-if="user.role === 'owner' || !user.role">
           <RouterLink to="/become-a-sitter" @click="clickLink">
             <span class="d-inline-block">成為接案者</span>
           </RouterLink>

@@ -6,6 +6,7 @@ const ownerOrderManagementRouter = {
   component: OwnerOrderManagement,
   meta: {
     verification_required: true,
+    accept_role: 'owner',
   },
 }
 

@@ -116,7 +116,7 @@ onMounted(() => {
               </ul>
             </div>
           </div>
-          <div class="px-2">
+          <div v-if="user.role === 'owner' || !user.role" class="px-2">
             <RouterLink
               to="/become-a-sitter"
               class="btn text-decoration-none text-primary-dark-second header-link fw-bold"
