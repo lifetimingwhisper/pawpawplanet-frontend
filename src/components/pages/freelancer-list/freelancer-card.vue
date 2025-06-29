@@ -1,4 +1,5 @@
 <script setup>
+import { useTemplateRef, onMounted } from 'vue'
 import { useDeviceStore } from '@/stores/device.js'
 import { storeToRefs } from 'pinia'
 
@@ -13,6 +14,9 @@ const deviceStore = useDeviceStore()
 
 const { is_mobile } = storeToRefs(deviceStore)
 
+const imgRef = useTemplateRef(`img-${props.item.id}`)
+
+
 const calcRating = (rating, index) => {
   // 計算評分
   if (rating !== 0) {
@@ -20,13 +24,25 @@ const calcRating = (rating, index) => {
   }
   return '#CECECE'
 }
+onMounted(() => {
+  // 如果是手機裝置，則設定圖片高度
+  console.log(`img-${props.item.id}`, imgRef.value.getBoundingClientRect().width)
+  if (is_mobile.value) {
+    imgRef.value.style.height = imgRef.value.getBoundingClientRect().width * 0.75 + 'px'
+  } else {
+    imgRef.value.style.height = '100%'
+  }
+})
 </script>
 <template>
   <RouterLink :to="`/service/${props.item.id}`" class="d-block text-decoration-none w-100 border border-primary freelancer-list-card">
     <div class="row g-2">
       <div class="col-lg-4">
-        <div class="w-100 h-100 overflow-hidden">
-          <img class="w-100 h-100 object-fit-cover freelancer-list-card-pic" :src="props.item.image" alt="">
+        <div :ref="`img-${props.item.id}`" class="freelancer-list-card-pic w-100 overflow-hidden d-flex align-items-center justify-content-center">
+          <img v-if="props.item.image?.length > 0" class="w-100 h-100 object-fit-cover" :src="props.item.image" alt="">
+          <div v-else class="d-flex align-items-center justify-content-center">
+            <SvgIcon name="user" color="#452B14" :size="40" />
+          </div>
         </div>
       </div>
       <div class="col-lg-8">

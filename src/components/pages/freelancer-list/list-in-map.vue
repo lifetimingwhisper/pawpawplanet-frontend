@@ -477,10 +477,13 @@ onActivated(() => {
                   >
                     <div
                       ref="img-in-card"
-                      class="position-relative w-100 overflow-hidden freelancer-list-location-card-top"
+                      class="position-relative w-100 overflow-hidden freelancer-list-location-card-top d-flex justify-content-center align-items-center"
                       :style="{ 'height': `${imgHeightInCard}px` }"
                     >
-                      <img class="w-100 h-100 object-fit-cover" :src="location.image" alt="">
+                      <img v-if="location.image?.length > 0" class="w-100 h-100 object-fit-cover" :src="location.image" alt="">
+                      <div v-else class="d-flex align-items-center justify-content-center">
+                        <SvgIcon name="user" color="#452B14" :size="40" />
+                      </div>
                       <button
                         type="button"
                         class="btn position-absolute freelancer-list-location-card-btn p-1 bg-white rounded-circle d-flex justify-content-center align-items-center"

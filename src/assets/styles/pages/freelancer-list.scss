@@ -65,7 +65,7 @@
     }
     &-pic {
       border-radius: 20px;
-      background: $black-100;
+      background: $black-200;
     }
     &-badge {
       min-width: 142px;
@@ -183,6 +183,7 @@
       }
       &-top {
         border-radius: 20px;
+        background: $black-200;
       }
     }
   }
