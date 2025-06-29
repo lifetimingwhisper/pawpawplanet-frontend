@@ -7,11 +7,12 @@ import { PatchOwnerProfile, GetOwnerProfile } from '@/plugins/api/users/users.js
 import { getPet, postPet, patchPet } from '@/plugins/api/pets/pets.js'
 import { useLoginStore } from '@/stores/login.js'
 import { useToast } from '@/plugins/toast/toast-plugin.js'
+import Loading from '@/components/loading/loading-component.vue'
 
 const { saveUserInfo } = useLoginStore()
 
 const toast = useToast()
-const loading = ref(true)
+const loading = ref(false)
 const router = useRouter()
 const thisModal = ref()
 const thisPetModal = ref()
@@ -72,6 +73,7 @@ const addPetProfile = () => {
 
 const submitOwner = async (data) => {
   try {
+    loading.value = true
     const updatedOwner = {
       ...data,
       avatar: getImageUrls(data.avatar),
@@ -87,6 +89,8 @@ const submitOwner = async (data) => {
   } catch (error) {
     //console.error('送出失敗:', error);
     toast.show('更新失敗，請稍後再試。', 'error')
+  } finally {
+    loading.value = false
   }
 }
 
@@ -98,6 +102,7 @@ const submitPet = async (rawData) => {
   }
   let postPetData
   try {
+    loading.value = true
     if (!hasPet.value) postPetData = await postPet(data)
     else postPetData = await patchPet(data)
     // console.log(postPetData);
@@ -106,6 +111,8 @@ const submitPet = async (rawData) => {
     updatePetCard()
   } catch (error) {
     console.error('寵物送出失敗:', error)
+  } finally {
+    loading.value = false
   }
 }
 
@@ -127,6 +134,7 @@ onMounted(async () => {
   }
 
   try {
+    loading.value = true
     const response = await GetOwnerProfile()
     console.log(response)
     owner.value = response.user
@@ -139,6 +147,7 @@ onMounted(async () => {
   }
 
   try {
+    loading.value = true
     const getPetData = await getPet()
     petData.value = getPetData.pet !== null ? getPetData.pet : petData.value
     // console.log(petData.value);
@@ -146,6 +155,8 @@ onMounted(async () => {
     if (hasPet.value) updatePetCard()
   } catch (err) {
     console.log('錯誤寵物get"', err)
+  } finally {
+    loading.value = false
   }
 })
 
@@ -238,6 +249,9 @@ const getImageUrls = (fileList = []) => {
       </div>
     </div>
 
+    <div v-if="loading" class="modal-overlay">
+      <Loading :show="loading"/>
+    </div>
 
     <Modal title="modal1" ref="thisModal" :ownerData="owner" @submit-owner="submitOwner">
       <template #body>編輯 個人資訊</template>
@@ -274,5 +288,15 @@ const getImageUrls = (fileList = []) => {
   }
   .border-dark-second{
     border-color: #452B14;
+  }
+
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 999;
   }
 </style>
