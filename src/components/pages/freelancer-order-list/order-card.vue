@@ -23,8 +23,8 @@
       <div class="row">
         <div :class="{ 'col-lg-7': notModal }">
           <div class="d-flex align-items-center mb-2">
-            <img v-if="orderData.owner.avatar" :src="orderData.owner.avatar" class="rounded-circle avatar me-3" alt="人物頭像" />
-            <SvgIcon v-if="!orderData.owner.avatar" name="user" class="rounded-circle avatar me-3" color="#452B14"/>
+            <img v-if="orderData.owner.avatar?.[0]" :src="orderData.owner.avatar[0]" class="rounded-circle avatar me-3" alt="人物頭像" />
+            <SvgIcon v-if="!orderData.owner.avatar?.[0]" name="user" class="rounded-circle avatar me-3" color="#452B14"/>
             <div>
               <div class="fw-bold text-break mb-1 ms-1">{{ orderData.owner.name }}</div>
               <div class="text-primary small">
