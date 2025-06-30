@@ -130,7 +130,7 @@ function c_show() {
 defineExpose({ p_show: c_show })
 
 //  圖片上傳
-const upload = ref(null)
+// const upload = ref(null)
 
 const petFilter = (newFile, oldFile, prevent) => {
   if (!newFile || !newFile.file) return

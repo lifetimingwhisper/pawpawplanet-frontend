@@ -7,11 +7,12 @@ import { PatchOwnerProfile, GetOwnerProfile } from '@/plugins/api/users/users.js
 import { getPet, postPet, patchPet } from '@/plugins/api/pets/pets.js'
 import { useLoginStore } from '@/stores/login.js'
 import { useToast } from '@/plugins/toast/toast-plugin.js'
+import Loading from '@/components/loading/loading-component.vue'
 
 const { saveUserInfo } = useLoginStore()
 
 const toast = useToast()
-const loading = ref(true)
+const loading = ref(false)
 const router = useRouter()
 const thisModal = ref()
 const thisPetModal = ref()
@@ -72,11 +73,13 @@ const addPetProfile = () => {
 
 const submitOwner = async (data) => {
   try {
+    loading.value = true
     const updatedOwner = {
       ...data,
       avatar: getImageUrls(data.avatar),
     }
     //console.log("送出資料：", updatedOwner)
+    // eslint-disable-next-line no-unused-vars
     const response = await PatchOwnerProfile(updatedOwner)
     //console.log('送出成功:', response.data);
     toast.show('更新成功', 'success')
@@ -84,9 +87,12 @@ const submitOwner = async (data) => {
     owner.value = Object.assign({}, owner.value, updatedOwner)
     localStorage.setItem('user_info', JSON.stringify(owner.value))
     saveUserInfo(owner.value)
+  // eslint-disable-next-line no-unused-vars
   } catch (error) {
     //console.error('送出失敗:', error);
     toast.show('更新失敗，請稍後再試。', 'error')
+  } finally {
+    loading.value = false
   }
 }
 
@@ -98,14 +104,19 @@ const submitPet = async (rawData) => {
   }
   let postPetData
   try {
+    loading.value = true
     if (!hasPet.value) postPetData = await postPet(data)
     else postPetData = await patchPet(data)
     // console.log(postPetData);
     petData.value = postPetData
     hasPet.value = true
     updatePetCard()
+  // eslint-disable-next-line no-unused-vars
   } catch (error) {
-    console.error('寵物送出失敗:', error)
+    // console.error('寵物送出失敗:', error)
+    toast.show('寵物更新失敗，請稍後再試。', 'error')
+  } finally {
+    loading.value = false
   }
 }
 
@@ -127,25 +138,33 @@ onMounted(async () => {
   }
 
   try {
+    loading.value = true
     const response = await GetOwnerProfile()
     console.log(response)
     owner.value = response.user
     //console.log("取得的 owner:", owner.value);
+  // eslint-disable-next-line no-unused-vars
   } catch (err) {
-    console.error('取得個人資料失敗:', err)
-    err.value = '無法取得個人資料，請稍後再試。'
+    // console.error('取得個人資料失敗:', err)
+    // err.value = '無法取得個人資料，請稍後再試。'
+    toast.show('取得個人資料失敗，請稍後再試。', 'error')
   } finally {
     loading.value = false
   }
 
   try {
+    loading.value = true
     const getPetData = await getPet()
     petData.value = getPetData.pet !== null ? getPetData.pet : petData.value
     // console.log(petData.value);
     hasPet.value = getPetData.pet === null ? false : true
     if (hasPet.value) updatePetCard()
+  // eslint-disable-next-line no-unused-vars
   } catch (err) {
-    console.log('錯誤寵物get"', err)
+    // console.log('錯誤寵物get"', err)
+    toast.show('取得寵物資料失敗，請稍後再試。', 'error')
+  } finally {
+    loading.value = false
   }
 })
 
@@ -238,6 +257,9 @@ const getImageUrls = (fileList = []) => {
       </div>
     </div>
 
+    <div v-if="loading" class="modal-overlay">
+      <Loading :show="loading"/>
+    </div>
 
     <Modal title="modal1" ref="thisModal" :ownerData="owner" @submit-owner="submitOwner">
       <template #body>編輯 個人資訊</template>
@@ -274,5 +296,15 @@ const getImageUrls = (fileList = []) => {
   }
   .border-dark-second{
     border-color: #452B14;
+  }
+
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 999;
   }
 </style>
