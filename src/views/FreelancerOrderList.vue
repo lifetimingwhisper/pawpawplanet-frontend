@@ -5,6 +5,9 @@
   import Modal from '@/components/modal/order-freelancer-modal.vue';
   import { getOrder, getSamedayOrder, patchOrder } from '@/plugins/api/order-freelancers/order-freelancers.js';
   import Loading from '@/components/loading/loading-component.vue'
+  import { useToast } from '@/plugins/toast/toast-plugin.js'
+
+  const toast = useToast()
   const thisModal = ref();
   const loading = ref(true);
 
@@ -45,7 +48,7 @@
       if(newTag !== oldTag) pageData.value.page = 1;
       clearTimeout(timer);
       timer = setTimeout(() => {
-        console.log('tag 或 page 變更了，但只執行一次 API');
+        // console.log('tag 或 page 變更了，但只執行一次 API');
         ordersData.value = [];
         getOrderApi();
       }, 100); // 延遲 100ms，避免短時間內連續觸發
@@ -63,48 +66,57 @@
   }
 
   async function getOrderApi(){
-    loading.value = true;
     try {
-      console.log('getOrderApi:' ,pageData.value);
+      loading.value = true;
+      // console.log('getOrderApi:' ,pageData.value);
       const getOrderOrigin = await getOrder(pageData.value);
       const getOrderData = getOrderOrigin.data;
-      console.log(getOrderOrigin);
-      console.log(getOrderData);
+      // console.log(getOrderOrigin);
+      // console.log(getOrderData);
       pageData.value.total = getOrderOrigin.total;
       ordersData.value = getOrderData;
-      loading.value = false;
+    // eslint-disable-next-line no-unused-vars
     }catch (err){
-      console.log('錯誤getOrder', err);
+      // console.log('錯誤getOrder', err);
+      toast.show('取得失敗，請稍後再試。', 'error')
+    }finally {
+      loading.value = false;
     }
   }
 
   async function getSamedayOrderApi(data){
-    loading.value = true;
     try {
-      console.log('getSamedayOrderApi:',data, data.order.id);
+      loading.value = true;
+      // console.log('getSamedayOrderApi:',data, data.order.id);
       let getSamedayOrdersData = await getSamedayOrder(data.order.id);
-      console.log(getSamedayOrdersData);
+      // console.log(getSamedayOrdersData);
       samedayOrdersData.value = [data, ...getSamedayOrdersData];
-      loading.value = false;
       if(Object.keys(getSamedayOrdersData).length === 0) patchOrderApi(data.order.id, 'accept');
       else showModal();
+    // eslint-disable-next-line no-unused-vars
     }catch (err){
-      console.log('錯誤getSameDayOrder', err);
+      // console.log('錯誤getSameDayOrder', err);
+      toast.show('更新失敗，請稍後再試。', 'error')
+    }finally {
+      loading.value = false;
     }
   }
 
   async function patchOrderApi(id, action){
-    loading.value = true;
     try {
+      loading.value = true;
       let postData = { 'action': action }
-      console.log('patchOrderApi:',id, action);
+      // console.log('patchOrderApi:',id, action);
       let patchOrderData = await patchOrder(id, postData);
-      console.log(patchOrderData);
+      // console.log(patchOrderData);
       hideModal();
       pageData.value.tag = patchOrderData.target_tag.value;
-      loading.value = false;
+    // eslint-disable-next-line no-unused-vars
     }catch (err){
-      console.log('錯誤getSameDayOrder', err);
+      // console.log('錯誤getSameDayOrder', err);
+      toast.show('更新失敗，請稍後再試。', 'error')
+    }finally {
+      loading.value = false;
     }
   }
 </script>

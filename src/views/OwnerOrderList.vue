@@ -8,6 +8,9 @@
   import { useLoginStore } from '@/stores/login.js'
   import { useRouter, useRoute } from 'vue-router';
   import Loading from '@/components/loading/loading-component.vue'
+  import { useToast } from '@/plugins/toast/toast-plugin.js'
+
+  const toast = useToast()
 
   const loginStore = useLoginStore()
   const loading = ref(true)
@@ -85,13 +88,10 @@
 
       if (Object.keys(newQuery).length > 0) {
         router.replace({
-          name: 'owner-order-list',
-          
-        }).catch(err => {
-          if (router.isNavigationFailure(err) && err.name === 'NavigationDuplicated') {
-          } else {
-            console.error("路由替換失敗:", err);
-          }
+          name: 'owner-order-list',      
+        // eslint-disable-next-line no-unused-vars
+        }).catch((err) => {
+          toast.show('發生錯誤，請稍後再試。', 'error')
         });
       } 
     },
@@ -129,8 +129,10 @@
       // console.log(getOrderData);
       pageData.value.total = getOrderOrigin.total;
       ordersData.value = getOrderData;
+    // eslint-disable-next-line no-unused-vars
     } catch (err){
-      console.log('錯誤getOrder', err);
+      // console.log('錯誤getOrder', err);
+      toast.show('取得失敗，請稍後再試。', 'error')
     } finally {
       loading.value = false;
     }
@@ -146,8 +148,10 @@
       if(Object.keys(getSamedayOrdersData).length === 0) {
         await postPaymentApi(data.order.id);
       } else showModal();
+    // eslint-disable-next-line no-unused-vars
     } catch (err){
-      console.log('錯誤getSameDayOrder', err);
+      // console.log('錯誤getSameDayOrder', err);
+      toast.show('操作失敗，請稍後再試。', 'error')
     } finally {
       loading.value = false;
     }
@@ -162,8 +166,10 @@
       console.log(patchOrderData);
       hideModal();
       pageData.value.tag = patchOrderData.target_tag.value;
+    // eslint-disable-next-line no-unused-vars
     } catch (err){
-      console.log('錯誤patchOrderApi', err);
+      // console.log('錯誤patchOrderApi', err);
+      toast.show('更新失敗，請稍後再試。', 'error')
     } finally {
       loading.value = false;
     }
@@ -195,8 +201,10 @@
       // 透過 JavaScript 提交表單，觸發瀏覽器導向綠界支付頁面
       console.log('綠界支付表單已準備就緒，正在提交...');
       ecpayForm.value.submit(); // 呼叫表單的 submit() 方法
+    // eslint-disable-next-line no-unused-vars
     } catch(error) {
-      console.log('錯誤postPaymentApi', err);
+      // console.log('錯誤postPaymentApi', error);
+      toast.show('更新失敗，請稍後再試。', 'error')
     } finally {
       loading.value = false;
     }
@@ -208,8 +216,10 @@
       orderDataBeingCommented.value = {};
       hideReviewModal();
       await postReviewApi(formData, orderData);
+    // eslint-disable-next-line no-unused-vars
     } catch(error) {
-      console.log('錯誤submitComment', err);
+      // console.log('錯誤submitComment', error);
+      toast.show('更新失敗，請稍後再試。', 'error')
     } finally {
       loading.value = false;
     }
@@ -225,8 +235,10 @@
       await postReview(orderData.order.id, data);
       orderData.review.rating = reviewData.selectedRating;
       orderData.review.comment = reviewData.comment;
+    // eslint-disable-next-line no-unused-vars
     } catch (err) {
-      console.log('錯誤postReviewApi', err);
+      // console.log('錯誤postReviewApi', err);
+      toast.show('更新失敗，請稍後再試。', 'error')
     } finally {
       loading.value = false;
     }
