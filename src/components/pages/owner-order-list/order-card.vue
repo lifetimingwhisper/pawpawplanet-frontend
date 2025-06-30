@@ -161,7 +161,7 @@
       </div>
 
       <div v-if="!(Object.keys(orderData.review).length === 0)"
-        class="position-relative border rounded-4 text-center p-3 mt-2">
+        class="position-relative border rounded-4 text-center p-3 mt-4 mt-lg-2">
         <div class="position-absolute top-0 start-50 translate-middle">
           <div class="text-brown fw-bold bg-white p-2">\ 評論 /</div>
         </div>
