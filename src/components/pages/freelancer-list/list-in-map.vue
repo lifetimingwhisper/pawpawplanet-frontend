@@ -524,7 +524,7 @@ onActivated(() => {
               </CustomMarker>
             </MarkerCluster>
           </GoogleMap>
-          <div class="freelancer-list-sidebar position-absolute d-none d-lg-none">
+          <div class="freelancer-list-sidebar position-absolute d-none d-lg-block">
             <button
               type="button"
               class="btn freelancer-list-expand bg-white rounded-circle d-flex align-items-center justify-content-center"
