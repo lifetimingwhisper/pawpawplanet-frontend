@@ -271,7 +271,7 @@ const remove = (file) => {
             </div>
             <div class="flex-center mt-5">
               <button
-                class="btn btn-outline-dark btn-lg rounded-pill w-100"
+                class="btn btn-outline-dark btn-lg rounded-pill w-100 me-3"
                 data-bs-dismiss="modal"
               >
                 取消
