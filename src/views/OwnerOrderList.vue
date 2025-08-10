@@ -4,7 +4,8 @@
   import OrderPagination from '@/components/pages/owner-order-list/order-pagination.vue';
   import Modal from '@/components/modal/order-owner-modal.vue';
   import ReviewModal from '@/components/modal/order-owner-comment-modal.vue';
-  import { getOrder, getSamedayOrder, patchOrder, postPayment, postReview } from '@/plugins/api/order-owners/order-owners.js';
+  import WeatherAdviceModal from '@/components/modal/order-weather-advice-modal.vue';
+  import { getOrder, getSamedayOrder, patchOrder, postPayment, postReview, generateWeatherAdvice } from '@/plugins/api/order-owners/order-owners.js';
   import { useLoginStore } from '@/stores/login.js'
   import { useRouter, useRoute } from 'vue-router';
   import Loading from '@/components/loading/loading-component.vue'
@@ -14,6 +15,7 @@
 
   const loginStore = useLoginStore()
   const loading = ref(true)
+  const isLoadingWeatherAdvice = ref(false)
 
   const router = useRouter();
   const route = useRoute();
@@ -23,10 +25,12 @@
 
   const thisModal = ref();
   const reviewModal = ref();
+  const weatherAdviceModal = ref()
 
   const ordersData = ref([]);
   const samedayOrdersData = ref([]);
   const orderDataBeingCommented = ref({})
+  const weatherAdviceMessage = ref('')
   const orderTags = ref([
     {
       name: '等待回覆',
@@ -113,6 +117,13 @@
   }
   function hideReviewModal() {
     reviewModal.value.p_hide();
+  }
+
+  function showWeatherAdviceModal(advice) {
+    weatherAdviceModal.value.p_show()
+  }
+  function hideWeatherAdviceModal() {
+    weatherAdviceModal.value.p_hide();
   }
 
   function changePage(page){
@@ -248,6 +259,34 @@
     orderDataBeingCommented.value = orderData;
     showReviewModal()
   }
+
+  function presentWeatherAdviceModal(advice) {
+    weatherAdviceMessage.value = advice
+    showWeatherAdviceModal()
+  }
+
+  async function getWeatherAdvice(location, date, service) {
+    try {
+      console.log('getWeatherAdvice called.......')
+      isLoadingWeatherAdvice.value = true;
+      const data = {
+        location: location,
+        date: date,
+        service: service 
+      };
+
+      console.log('data: ', data)
+      const response = await generateWeatherAdvice(data);
+      console.log('response: ', response)
+      presentWeatherAdviceModal(response.message)
+    } catch(error) {
+      console.log('error:', error)
+      toast.show('取得天氣建議失敗，請稍後再試。', 'error')
+    } finally {
+      isLoadingWeatherAdvice.value = false;
+    }
+  }
+
 </script>
 <template>
   <main>
@@ -261,9 +300,10 @@
     </div>
     <Loading :show="loading" class="flex-center" style="height: 300px;"/>
     <div v-show="!loading" v-for="orderData in ordersData" :key="orderData.order.id">
-      <OrderCard :notModal="true" :pageData="pageData" :orderData="orderData"
+      <OrderCard :notModal="true" :pageData="pageData" :orderData="orderData" :isLoadingWeatherAdvice="isLoadingWeatherAdvice"
         @get-sameday-order-api="getSamedayOrderApi" @patch-order-api="patchOrderApi"
-        @present-review-modal="presentReviewModal" @post-payment-api="postPaymentApi"></OrderCard>
+        @present-review-modal="presentReviewModal" @post-payment-api="postPaymentApi"
+        @get-weather-advice="getWeatherAdvice"></OrderCard>
     </div>
 
     <div v-if="Object.keys(ordersData).length === 0 && !loading" class="flex-center" style="height: 300px;">無資料</div>
@@ -279,6 +319,7 @@
     </Modal>
     <ReviewModal title="ReviewModal" ref="reviewModal" :orderData="orderDataBeingCommented" @submit-comment="submitComment">
     </ReviewModal>
+    <WeatherAdviceModal title="WeatherAdviceModal" ref="weatherAdviceModal" :message="weatherAdviceMessage" />
   </main>
 </template>
 <style scoped lang="scss">

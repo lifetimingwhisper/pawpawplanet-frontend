@@ -1,11 +1,13 @@
 <script setup>
   import formatter from '@/stores/formatter';
+  import Loading from '@/components/loading/loading-component.vue'
   const props = defineProps({
     orderData: Object,
     notModal: Boolean,
-    pageData: Object
+    pageData: Object,
+    isLoadingWeatherAdvice: Boolean
   });
-  const emit = defineEmits(['patchOrderApi', 'getSamedayOrderApi']);
+  const emit = defineEmits(['patchOrderApi', 'getSamedayOrderApi', 'getWeatherAdvice']);
   const { formatSpecies, formatGender, formatSize, formatAge } = formatter(props.orderData['pet']);
   const { formatStatusType } = formatter(props.orderData['order']);
   const { formatServerType } = formatter(props.orderData['service']);
@@ -62,7 +64,10 @@
           </div>
         </div>
         <div :class="{ 'col-lg-5': notModal }">
-          <div class="bg-secondary-tint rounded-3 p-3 mb-3">
+            <div class="bg-secondary-tint rounded-3 p-3 mb-3" style="position: relative;">
+            <div v-if="isLoadingWeatherAdvice" class="loading-overlay">
+              <Loading :show="true" size="36px" />
+            </div>
             <div class="row">
               <template v-for="i in 4" :key="i">
                 <div class="col-5 col-md-4 text-end">
@@ -80,7 +85,15 @@
                     </span>
                   </p>
                   <p v-if="i == 2">{{ orderData.order.service_date }}</p>
-                  <p v-if="i == 3">{{ orderData.service.city }} {{ orderData.service.area }}</p>
+                  <p v-if="i == 3">{{ orderData.service.city }} {{ orderData.service.area }} 
+                    <button v-if="pageData.tag === 2" 
+                      class="btn btn-outline-primary weather-btn"
+                      @click="emit('getWeatherAdvice', orderData.service.city, orderData.order.service_date, formatServerType.name)"
+                      aria-label="Generate Weather Advice"
+                      >
+                      <svg-icon name="weather" color="#FFCF75" :size="22"></svg-icon>
+                    </button>
+                  </p>  
                   <p v-if="i == 4" class="text-break">{{ orderData.order.note }}</p>
                 </div>
               </template>
@@ -141,5 +154,23 @@
   }
   .pet-name{
     width: 80px;
+  }
+  .weather-btn {
+    display: inline-flex;
+    align-items: center;
+    vertical-align: middle; 
+    padding: 2px 8px; 
+    height: 1.8em; 
+    line-height: 1;
+    margin-left: 4px; // optional: space from text
+  }
+  .loading-overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255,255,255,0.5); // 半透明背景
   }
 </style>

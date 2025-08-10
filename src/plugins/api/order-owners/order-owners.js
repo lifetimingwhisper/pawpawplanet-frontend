@@ -40,3 +40,11 @@ export function postReview(id, data) {
     data
   });
 }
+
+export function generateWeatherAdvice(data) {
+  return service({
+    url: `${root2}/weather-advice`,
+    method: 'post',
+    data
+  });
+}

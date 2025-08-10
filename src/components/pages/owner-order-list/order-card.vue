@@ -1,13 +1,15 @@
 <script setup>
   import { computed } from 'vue';
   import formatter from '@/stores/formatter';
+  import Loading from '@/components/loading/loading-component.vue'
 
   const props = defineProps({
     orderData: Object,
     notModal: Boolean,
-    pageData: Object
+    pageData: Object,
+    isLoadingWeatherAdvice: Boolean
   });
-  const emit = defineEmits(['patchOrderApi', 'getSamedayOrderApi', 'postPaymentApi', 'presentReviewModal']);
+  const emit = defineEmits(['patchOrderApi', 'getSamedayOrderApi', 'postPaymentApi', 'presentReviewModal', 'getWeatherAdvice']);
   const { formatSpecies, formatGender, formatSize, formatAge } = formatter(props.orderData['pet']);
   // const { formatStatus } = formatter(props.orderData['order']);
   const { formatServerType } = formatter(props.orderData['service']);
@@ -21,7 +23,7 @@
   const isServicedToday = computed(() => {
     return props.orderData?.order?.service_date === formatToYYYYMMDDWithTimeZone(new Date())
   });
-  
+
   function formatToYYYYMMDDWithTimeZone(date, timeZone = 'Asia/Taipei') {
     // 創建一個日期格式化器
     const options = {
@@ -106,7 +108,10 @@
           </div>
         </div>
         <div :class="{ 'col-lg-5': notModal }">
-          <div class="bg-secondary-tint rounded-3 p-3 mb-3">
+          <div class="bg-secondary-tint rounded-3 p-3 mb-3" style="position: relative;">
+            <div v-if="isLoadingWeatherAdvice" class="loading-overlay">
+              <Loading :show="true" size="36px" />
+            </div>
             <div class="row">
               <template v-for="i in 4" :key="i">
                 <div class="col-5 col-md-4 text-end">
@@ -124,7 +129,22 @@
                     </span>
                   </p>
                   <p v-if="i == 2">{{ orderData.order.service_date }}</p>
-                  <p v-if="i == 3">{{ orderData.service.city }} {{ orderData.service.area }}</p>
+                  <p v-if="i == 3">{{ orderData.service.city }} {{ orderData.service.area }} 
+                    <button v-if="pageData.tag === 2" 
+                      class="btn btn-outline-primary weather-btn"
+                      @click="emit('getWeatherAdvice', orderData.service.city, orderData.order.service_date, formatServerType.name)"
+                      aria-label="Generate Weather Advice"
+                      >
+                      <svg-icon name="weather" color="#FFCF75" :size="22"></svg-icon>
+                    </button>
+                  </p>  
+                  <!-- Weather Advice Modal -->
+                  <!-- <div v-if="weatherAdviceModal" class="weather-advice-modal">
+                    <div class="modal-content">
+                      <span>{{ weatherAdviceMessage }}</span>
+                      <button class="btn btn-outline-primary w-100 text-dark rounded-pill p-3" @click="weatherAdviceModal = false">關閉</button>
+                    </div>
+                  </div> -->
                   <p v-if="i == 4" class="text-break">{{ orderData.order.note }}</p>
                 </div>
               </template>
@@ -197,4 +217,34 @@
   .pet-name{
     width: 80px;
   }
+  .weather-btn {
+    display: inline-flex;
+    align-items: center;
+    vertical-align: middle; 
+    padding: 2px 8px; 
+    height: 1.8em; 
+    line-height: 1;
+    margin-left: 4px; // optional: space from text
+  }
+  .loading-overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255,255,255,0.5); // 半透明背景
+  }
+  // .weather-advice-modal {
+  //   position: absolute;
+  //   top: 40px; // 根據 icon 位置微調
+  //   left: 50%;
+  //   transform: translateX(-50%);
+  //   z-index: 100;
+  //   background: #fff;
+  //   border: 1px solid #ECB88A;
+  //   border-radius: 8px;
+  //   box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  //   padding: 16px;
+  // }
 </style>

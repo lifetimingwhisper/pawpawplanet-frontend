@@ -3,13 +3,17 @@
   import OrderCard from '@/components/pages/freelancer-order-list/order-card.vue';
   import OrderPagination from '@/components/pages/freelancer-order-list/order-Pagination.vue';
   import Modal from '@/components/modal/order-freelancer-modal.vue';
-  import { getOrder, getSamedayOrder, patchOrder } from '@/plugins/api/order-freelancers/order-freelancers.js';
+  import WeatherAdviceModal from '@/components/modal/order-weather-advice-modal.vue';
+  import { getOrder, getSamedayOrder, patchOrder, generateWeatherAdvice } from '@/plugins/api/order-freelancers/order-freelancers.js';
   import Loading from '@/components/loading/loading-component.vue'
   import { useToast } from '@/plugins/toast/toast-plugin.js'
 
   const toast = useToast()
   const thisModal = ref();
   const loading = ref(true);
+  const isLoadingWeatherAdvice = ref(false)
+  const weatherAdviceModal = ref()
+  const weatherAdviceMessage = ref('')
 
   const ordersData = ref([]);
   const samedayOrdersData = ref([]);
@@ -59,6 +63,13 @@
   }
   function hideModal(){
     thisModal.value.p_hide();
+  }
+
+  function showWeatherAdviceModal(advice) {
+    weatherAdviceModal.value.p_show()
+  }
+  function hideWeatherAdviceModal() {
+    weatherAdviceModal.value.p_hide();
   }
 
   function changePage(page){
@@ -119,6 +130,33 @@
       loading.value = false;
     }
   }
+
+  function presentWeatherAdviceModal(advice) {
+    weatherAdviceMessage.value = advice
+    showWeatherAdviceModal()
+  }
+
+  async function getWeatherAdvice(location, date, service) {
+    try {
+      console.log('getWeatherAdvice called.......')
+      isLoadingWeatherAdvice.value = true;
+      const data = {
+        location: location,
+        date: date,
+        service: service 
+      };
+
+      console.log('data: ', data)
+      const response = await generateWeatherAdvice(data);
+      console.log('response: ', response)
+      presentWeatherAdviceModal(response.message)
+    } catch(error) {
+      console.log('error:', error)
+      toast.show('取得天氣建議失敗，請稍後再試。', 'error')
+    } finally {
+      isLoadingWeatherAdvice.value = false;
+    }
+  }
 </script>
 <template>
   <main>
@@ -131,7 +169,7 @@
 
     <Loading :show="loading" class="flex-center" style="height: 300px;"/>
     <div v-show="!loading" v-for="orderData in ordersData" :key="orderData.order.id">
-      <OrderCard :notModal="true" :pageData="pageData" :orderData="orderData" @get-sameday-order-api="getSamedayOrderApi" @patch-order-api="patchOrderApi"></OrderCard>
+      <OrderCard :notModal="true" :pageData="pageData" :orderData="orderData" :isLoadingWeatherAdvice="isLoadingWeatherAdvice" @get-sameday-order-api="getSamedayOrderApi" @patch-order-api="patchOrderApi" @get-weather-advice="getWeatherAdvice"></OrderCard>
     </div>
     <div v-if="Object.keys(ordersData).length === 0 && !loading" class="flex-center" style="height: 300px;">無資料</div>
 
@@ -142,6 +180,7 @@
     <Modal title="Modal1" ref="thisModal" :pageData="pageData" :samedayOrdersData="samedayOrdersData" :patchOrderApi="patchOrderApi">
       <template #header>您在 {{ samedayOrdersData?.[0]?.order?.service_date }} 有 {{ Object.keys(samedayOrdersData).length }} 項等待接受的預約，請從清單中選擇接受的預約，其他預約會自動拒絕</template>
     </Modal>
+    <WeatherAdviceModal title="WeatherAdviceModal" ref="weatherAdviceModal" :message="weatherAdviceMessage" />
   </main>
 </template>
 <style scoped lang="scss">
