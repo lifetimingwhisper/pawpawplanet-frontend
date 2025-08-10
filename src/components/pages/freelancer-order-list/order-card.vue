@@ -71,7 +71,16 @@
             <div class="row">
               <template v-for="i in 4" :key="i">
                 <div class="col-5 col-md-4 text-end">
-                  <p v-if="i == 1">預約服務<span>｜</span></p>
+                  <p v-if="i == 1">
+                    <span>
+                      <button v-if="pageData.tag === 2" 
+                        class="btn btn-outline-primary weather-btn"
+                        @click="emit('getWeatherAdvice', orderData.service.city, orderData.order.service_date, formatServerType.name)"
+                        aria-label="Generate Weather Advice"
+                        >
+                        <svg-icon name="weather" color="#FFCF75" :size="22"></svg-icon>
+                      </button>
+                    </span> 預約服務<span>｜</span></p>
                   <p v-if="i == 2">時間<span>｜</span></p>
                   <p v-if="i == 3">地點<span>｜</span></p>
                   <p v-if="i == 4">備註<span>｜</span></p>
@@ -85,15 +94,7 @@
                     </span>
                   </p>
                   <p v-if="i == 2">{{ orderData.order.service_date }}</p>
-                  <p v-if="i == 3">{{ orderData.service.city }} {{ orderData.service.area }} 
-                    <button v-if="pageData.tag === 2" 
-                      class="btn btn-outline-primary weather-btn"
-                      @click="emit('getWeatherAdvice', orderData.service.city, orderData.order.service_date, formatServerType.name)"
-                      aria-label="Generate Weather Advice"
-                      >
-                      <svg-icon name="weather" color="#FFCF75" :size="22"></svg-icon>
-                    </button>
-                  </p>  
+                  <p v-if="i == 3">{{ orderData.service.city }} {{ orderData.service.area }}</p>  
                   <p v-if="i == 4" class="text-break">{{ orderData.order.note }}</p>
                 </div>
               </template>
