@@ -1,61 +1,6 @@
-<template>
-  <div class="form-box my-4">
-    <Loading :show="loading" />
-    <div class="d-flex justify-content-between align-items-center mb-3">
-      <h4 class="text-primary-dark-second">基本資料設定</h4>
-      <button
-        v-if="!isEditMode"
-        class="text-primary-dark-second btn btn-primary btn-lg rounded-pill"
-        @click="startEdit"
-      >
-        <i class="bi bi-pencil-square"></i> 編輯
-      </button>
-    </div>
-    <profile-form v-model="tempForm" :edit-mode="isEditMode" :errors="errors"> </profile-form>
-
-    <hr />
-    <h5 class="text-primary-dark-second mb-3">你可以接案的時間是</h5>
-    <weekly-availability
-      class="my-3"
-      v-model:weeklyMode="tempForm.is_weekly_mode"
-      v-model:selectedDays="tempForm.working_days"
-      :endDate="originalForm.calendar.end_date"
-      :editMode="isEditMode"
-      :errors="errors"
-    >
-    </weekly-availability>
-    <schedule-calendar
-      v-model="originalForm.calendar.schedule"
-      :weeklyMode="tempForm.is_weekly_mode"
-      :editMode="isEditMode"
-    >
-    </schedule-calendar>
-    <div class="text-end mt-3" v-if="isEditMode">
-      <button
-        type="button"
-        class="btn-outline-dark-second btn btn-lg rounded-pill me-2"
-        @click="cancelEdit"
-      >
-        取消
-      </button>
-      <button
-        type="button"
-        class="text-primary-dark-second btn btn-primary btn-lg rounded-pill"
-        @click="confirmSave"
-        :disabled="!hasChanges"
-      >
-        確認儲存
-      </button>
-    </div>
-
-    <hr />
-    <service-list :services="originalForm.services" :is-finished="isFinished" />
-  </div>
-</template>
-
 <script setup>
 import Loading from '@/components/loading/loading-component.vue'
-import { ref, watch, onMounted } from 'vue'
+import { ref, watch, onMounted, computed } from 'vue'
 import isEqual from 'lodash/isEqual'
 import ProfileForm from '@/components/admin/freelancer/ProfileForm.vue'
 import WeeklyAvailability from '@/components/admin/freelancer/WeeklyAvailability.vue'
@@ -64,10 +9,12 @@ import ServiceList from '@/components/admin/freelancer/ServiceList.vue'
 import {
   getFreelancerProfile,
   updateFreelancerProfile,
+  generateIntroSuggestion
 } from '@/plugins/api/freelancers/freelancers.js'
 import { useLoginStore } from '@/stores/login.js'
 import { useRouter } from 'vue-router'
 import { useToast } from '@/plugins/toast/toast-plugin.js'
+import IntroSuggestionModal from '@/components/modal/freelancer-intro-suggestion-modal.vue'
 
 const { saveUserInfo } = useLoginStore()
 
@@ -108,6 +55,15 @@ const tempForm = ref({ ...emptyForm })
 //編輯表格數據跟原始數據比對，有變更就為true
 const hasChanges = ref(false)
 const router = useRouter()
+
+const isIntroSuggestionShown = computed(() => {
+  // 自我介紹有內容就顯示'智能自介'按鈕，支援 AI 延展自我
+  const description = originalForm.value.description?.trim()
+  // 把 description 這個值「強制」轉成 true 或 false
+  return !!description 
+})
+const introSuggestion = ref('')
+const introSuggestionModal = ref()
 
 onMounted(async () => {
   const loginStore = useLoginStore()
@@ -235,6 +191,52 @@ function cancelEdit() {
   tempForm.value = JSON.parse(JSON.stringify(originalForm.value))
 }
 
+async function getIntroSuggestion(originalIntro) {
+  try {
+     // console.log('getIntroSuggestion called.......')
+      loading.value = true;
+      const data = {
+        intro: originalIntro
+      };
+
+      // console.log('data: ', data)
+      const response = await generateIntroSuggestion(data);
+      // console.log('response: ', response)
+      
+      presentIntroSuggestionModal(response.message)
+  } catch(error) {
+    console.log('error:', error)
+    toast.show('取得天氣建議失敗，請稍後再試。', 'error')
+  } finally {
+    loading.value = false;
+  }
+}
+
+function presentIntroSuggestionModal(suggestion) {
+  // console.log('suggestion: ', suggestion)
+  introSuggestion.value = suggestion
+  showIntroSuggestionModal()
+}
+
+function showIntroSuggestionModal() {
+  introSuggestionModal.value.p_show()
+}
+function hideIntroSuggestionModal() {
+  introSuggestionModal.value.p_hide();
+}
+
+async function replaceIntro(newIntro) {
+  try {
+    introSuggestion.value = {};
+    tempForm.value.description = newIntro 
+    hideIntroSuggestionModal();
+  // eslint-disable-next-line no-unused-vars
+  } catch(error) {
+    console.log('錯誤submitComment', error);
+    toast.show('更新失敗，請稍後再試。', 'error')
+  }
+}
+
 watch(
   tempForm,
   () => {
@@ -243,6 +245,70 @@ watch(
   { deep: true },
 )
 </script>
+
+<template>
+  <div class="form-box my-4">
+    <Loading :show="loading" />
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <h4 class="text-primary-dark-second">基本資料設定</h4>
+      <button
+        v-if="!isEditMode"
+        class="text-primary-dark-second btn btn-primary btn-lg rounded-pill"
+        @click="startEdit"
+      >
+        <i class="bi bi-pencil-square"></i> 編輯
+      </button>
+    </div>
+    <profile-form 
+      v-model="tempForm" 
+      :edit-mode="isEditMode" 
+      :errors="errors"
+      :show-intro-suggestion="isEditMode && isIntroSuggestionShown"
+       @get-intro-suggestion="getIntroSuggestion"
+    > 
+    </profile-form>
+
+    <hr />
+    <h5 class="text-primary-dark-second mb-3">你可以接案的時間是</h5>
+    <weekly-availability
+      class="my-3"
+      v-model:weeklyMode="tempForm.is_weekly_mode"
+      v-model:selectedDays="tempForm.working_days"
+      :endDate="originalForm.calendar.end_date"
+      :editMode="isEditMode"
+      :errors="errors"
+    >
+    </weekly-availability>
+    <schedule-calendar
+      v-model="originalForm.calendar.schedule"
+      :weeklyMode="tempForm.is_weekly_mode"
+      :editMode="isEditMode"
+    >
+    </schedule-calendar>
+    <div class="text-end mt-3" v-if="isEditMode">
+      <button
+        type="button"
+        class="btn-outline-dark-second btn btn-lg rounded-pill me-2"
+        @click="cancelEdit"
+      >
+        取消
+      </button>
+      <button
+        type="button"
+        class="text-primary-dark-second btn btn-primary btn-lg rounded-pill"
+        @click="confirmSave"
+        :disabled="!hasChanges"
+      >
+        確認儲存
+      </button>
+    </div>
+
+    <hr />
+    <service-list :services="originalForm.services" :is-finished="isFinished" />
+    <IntroSuggestionModal title="IntroSuggestionModal" ref="introSuggestionModal" :suggestion="introSuggestion" @replace-intro="replaceIntro">
+    </IntroSuggestionModal>
+  </div>
+</template>
 
 <style scoped lang="scss">
 hr {

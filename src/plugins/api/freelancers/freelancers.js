@@ -40,3 +40,11 @@ export function getFreelancerSchedule(id) {
     method: 'get',
   });
 }
+
+export function generateIntroSuggestion(data) {
+  return service({
+    url: `${root}/profile/intro-suggestion`,
+    method: 'post',
+    data
+  });
+}

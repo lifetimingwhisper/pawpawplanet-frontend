@@ -131,7 +131,18 @@
         }}</small>
       </div>
       <div>
-        <label for="input-description" class="form-label required">自我介紹</label>
+        <label for="input-description" class="form-label required">自我介紹 
+          <span>
+            <!-- <button v-if="editMode && showIntroSuggestion" -->
+            <button v-if="showIntroSuggestion"
+              class="btn btn-outline-primary weather-btn"
+              @click="emit('getIntroSuggestion', modelValue.description)"
+              aria-label="Generate Intro Suggestion"
+              >
+              <svg-icon name="robot" color="#FFCF75" :size="28"></svg-icon>
+            </button>
+          </span>
+        </label>
         <textarea
           id="input-description"
           v-model="modelValue.description"
@@ -164,8 +175,13 @@ defineProps({
     type: Object,
     default: () => ({}),
   },
+  showIntroSuggestion: {
+    type: Boolean,
+    default: false,
+  }
 })
 
+const emit = defineEmits(['getIntroSuggestion']);
 const toast = useToast()
 const modelValue = defineModel()
 
